@@ -28,6 +28,10 @@
             android:name=".GroupSearchActivity"
             android:label="@string/title_activity_group_search" >
         </activity>
+        <activity
+            android:name=".GroupCreateActivity"
+            android:label="@string/title_activity_group_create" >
+        </activity>
     </application>
 
 </manifest>
