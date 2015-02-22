@@ -1,7 +1,17 @@
 package jp.gr.java_conf.shiolier.wayn.entity;
 
+import android.location.Location;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import jp.gr.java_conf.shiolier.wayn.util.LocationCalc;
+import jp.gr.java_conf.shiolier.wayn.util.Point2D;
 
 public class User {
 	public static final String KEY_ID = "id";
@@ -19,8 +29,8 @@ public class User {
 	private double latitude;
 	private double longitude;
 	private double altitude;
-	private int updatedLocationAt;
-	private int createdAt;
+	private long updatedLocationAt;
+	private long createdAt;
 
 	public User() {
 	}
@@ -83,19 +93,19 @@ public class User {
 		this.altitude = altitude;
 	}
 
-	public int getUpdatedLocationAt() {
+	public long getUpdatedLocationAt() {
 		return updatedLocationAt;
 	}
 
-	public void setUpdatedLocationAt(int updatedLocationAt) {
+	public void setUpdatedLocationAt(long updatedLocationAt) {
 		this.updatedLocationAt = updatedLocationAt;
 	}
 
-	public int getCreatedAt() {
+	public long getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(int createdAt) {
+	public void setCreatedAt(long createdAt) {
 		this.createdAt = createdAt;
 	}
 
@@ -112,5 +122,19 @@ public class User {
 			return "";
 		}
 		return jsonObject.toString();
+	}
+
+	public String queryStringForAuthWhenGet() {
+		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair(KEY_ID, Integer.toString(id)));
+		params.add(new BasicNameValuePair(KEY_PASSWORD, password));
+		return URLEncodedUtils.format(params, "UTF-8");
+	}
+
+	public Point2D getPoint2D(Location currentLocation, int meter) {
+		float x = (float)(((currentLocation.getLongitude() - getLongitude()) * LocationCalc.longitudeOneDegree(currentLocation.getLongitude()) / meter));
+		float y = (float)(((currentLocation.getLatitude() - getLatitude()) * LocationCalc.LATITUDE_ONE_DEGREE) / meter);
+
+		return new Point2D(x, y);
 	}
 }

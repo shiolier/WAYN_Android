@@ -3,12 +3,12 @@ package jp.gr.java_conf.shiolier.wayn.entity;
 public class GroupRequest {
 	private int id;
 	private User user;
-	private int requestTime;
+	private long requestTime;
 
 	public GroupRequest() {
 	}
 
-	public GroupRequest(int id, User user, int requestTime) {
+	public GroupRequest(int id, User user, long requestTime) {
 		this.id = id;
 		this.user = user;
 		this.requestTime = requestTime;
@@ -30,11 +30,11 @@ public class GroupRequest {
 		this.user = user;
 	}
 
-	public int getRequestTime() {
+	public long getRequestTime() {
 		return requestTime;
 	}
 
-	public void setRequestTime(int requestTime) {
+	public void setRequestTime(long requestTime) {
 		this.requestTime = requestTime;
 	}
 }
