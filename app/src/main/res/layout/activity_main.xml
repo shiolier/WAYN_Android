@@ -13,24 +13,26 @@
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="2"
-		android:text="Radar"
+		android:text="@string/btn_radar"
 		android:textSize="24sp"
 		android:id="@+id/btn_radar"/>
 
-	<Button
+	<ToggleButton
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"
-		android:text="Post Location Service\nON or OFF"
-		android:textSize="24sp"
-		android:id="@+id/btn_post_location"/>
+		android:textOff="@string/tglbtn_post_location_enable_off"
+		android:textOn="@string/tglbtn_post_location_enable_on"
+		android:textSize="20sp"
+		android:id="@+id/tglbtn_post_location_enable"
+		android:layout_gravity="center_horizontal"/>
 
 	<Button
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"
-		android:text="Setting"
-		android:textSize="24sp"
+		android:text="@string/btn_setting"
+		android:textSize="20sp"
 		android:id="@+id/btn_setting"/>
 
 </LinearLayout>

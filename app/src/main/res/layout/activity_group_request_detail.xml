@@ -10,19 +10,46 @@
 				tools:context="jp.gr.java_conf.shiolier.wayn.GroupRequestDetailActivity">
 
 
-	<TextView
+	<LinearLayout
+		android:orientation="horizontal"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="ユーザーID: "
-		android:textSize="24sp"
-		android:id="@+id/txt_user_id"/>
+		android:layout_height="wrap_content">
 
-	<TextView
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/label_user_id"
+			android:textSize="20sp"/>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text=""
+			android:textSize="24sp"
+			android:id="@+id/txt_user_id"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="ユーザー名: "
-		android:textSize="24sp"
-		android:id="@+id/txt_user_name"/>
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/label_user_name"
+			android:textSize="20sp"/>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text=""
+			android:textSize="24sp"
+			android:id="@+id/txt_user_name"/>
+
+	</LinearLayout>
+
 
 	<LinearLayout
 		android:orientation="horizontal"
@@ -34,14 +61,14 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:text="承認"
+			android:text="@string/btn_approve"
 			android:id="@+id/btn_approve"/>
 
 		<Button
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:text="拒否"
+			android:text="@string/btn_reject"
 			android:id="@+id/btn_reject"/>
 	</LinearLayout>
 

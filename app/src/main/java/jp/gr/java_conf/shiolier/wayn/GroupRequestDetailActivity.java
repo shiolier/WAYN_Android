@@ -18,10 +18,10 @@ public class GroupRequestDetailActivity extends ActionBarActivity {
 		Intent intent = getIntent();
 
 		TextView txtUserId = (TextView)findViewById(R.id.txt_user_id);
-		txtUserId.setText(String.format("ユーザーID: %d", intent.getIntExtra(GroupRequestListActivity.KEY_USER_ID, 0)));
+		txtUserId.setText(Integer.toString(intent.getIntExtra(GroupRequestListActivity.KEY_USER_ID, 0)));
 
 		TextView txtUserName = (TextView)findViewById(R.id.txt_user_name);
-		txtUserName.setText(String.format("ユーザー名: %s", intent.getStringExtra(GroupRequestListActivity.KEY_USER_NAME)));
+		txtUserName.setText(intent.getStringExtra(GroupRequestListActivity.KEY_USER_NAME));
 
 		Button btnApprove = (Button)findViewById(R.id.btn_approve);
 		btnApprove.setOnClickListener(new View.OnClickListener() {

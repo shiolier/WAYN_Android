@@ -12,12 +12,12 @@
 	<EditText
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:hint="グループ名"
+		android:hint="@string/edt_group_name_hint"
 		android:id="@+id/edt_group_name"/>
 
 	<Button
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="グループ作成"
+		android:text="@string/btn_create"
 		android:id="@+id/btn_create"/>
 </LinearLayout>

@@ -19,51 +19,103 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:hint="グループID"
+			android:hint="@string/edt_group_id_hint"
 			android:inputType="number"
 			android:id="@+id/edt_group_id"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="検索"
+			android:text="@string/btn_search"
 			android:id="@+id/btn_search"/>
 	</LinearLayout>
 
-	<TextView
-		android:layout_marginTop="32dp"
+	<LinearLayout
+		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="グループID: "
-		android:textSize="24sp"
-		android:id="@+id/txt_group_id"/>
+		android:layout_marginTop="32dp">
 
-	<TextView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="グループ名: "
-		android:textSize="24sp"
-		android:id="@+id/txt_group_name"/>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/label_group_id"
+			android:textSize="20sp"/>
 
-	<TextView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="リーダーID: "
-		android:textSize="24sp"
-		android:id="@+id/txt_leader"/>
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text=""
+			android:textSize="24sp"
+			android:id="@+id/txt_group_id"/>
 
-	<TextView
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="リーダー名: "
-		android:textSize="24sp"
-		android:id="@+id/txt_leader_name"/>
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/label_group_name"
+			android:textSize="20sp"/>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text=""
+			android:textSize="24sp"
+			android:id="@+id/txt_group_name"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/label_leader_id"
+			android:textSize="20sp"/>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text=""
+			android:textSize="24sp"
+			android:id="@+id/txt_leader"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/label_leader_name"
+			android:textSize="20sp"/>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text=""
+			android:textSize="24sp"
+			android:id="@+id/txt_leader_name"/>
+
+	</LinearLayout>
 
 	<Button
 		android:layout_marginTop="32dp"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="加入申請"
+		android:text="@string/btn_request"
 		android:id="@+id/btn_request"/>
 
 </LinearLayout>

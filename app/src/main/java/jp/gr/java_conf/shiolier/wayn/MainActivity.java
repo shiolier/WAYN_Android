@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ToggleButton;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -25,8 +26,8 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 
-		Button btnPostLocation = (Button)findViewById(R.id.btn_post_location);
-		btnPostLocation.setOnClickListener(new View.OnClickListener() {
+		ToggleButton tglbtnPostLocation = (ToggleButton)findViewById(R.id.tglbtn_post_location_enable);
+		tglbtnPostLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
