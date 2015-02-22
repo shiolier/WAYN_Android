@@ -32,6 +32,10 @@
             android:name=".GroupCreateActivity"
             android:label="@string/title_activity_group_create" >
         </activity>
+        <activity
+            android:name=".GroupManageActivity"
+            android:label="@string/title_activity_group_manage" >
+        </activity>
     </application>
 
 </manifest>
