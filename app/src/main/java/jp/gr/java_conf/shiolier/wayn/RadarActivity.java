@@ -1,5 +1,6 @@
 package jp.gr.java_conf.shiolier.wayn;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,8 +8,9 @@ import android.view.MenuItem;
 
 import jp.gr.java_conf.shiolier.wayn.view.RadarView;
 
-
 public class RadarActivity extends ActionBarActivity {
+	private static final int REQUEST_GROUP_SELECT = 0x01;
+
 	private RadarView radarView;
 
 	@Override
@@ -22,23 +24,29 @@ public class RadarActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_radar, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
-		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_display_group_setting) {
+			Intent intent = new Intent(this, DisplayGroupSettingActivity.class);
+			startActivityForResult(intent, REQUEST_GROUP_SELECT);
 			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == REQUEST_GROUP_SELECT && resultCode == RESULT_OK) {
+			int groupId = data.getIntExtra(DisplayGroupSettingActivity.KEY_GROUP_ID, 0);
+		}
 	}
 }

@@ -2,12 +2,9 @@ package jp.gr.java_conf.shiolier.wayn;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 
 public class GroupSearchActivity extends ActionBarActivity {
 

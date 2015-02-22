@@ -1,12 +1,10 @@
 package jp.gr.java_conf.shiolier.wayn;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
 
 public class MainActivity extends ActionBarActivity {
 
@@ -19,7 +17,11 @@ public class MainActivity extends ActionBarActivity {
 		btnRadar.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// サービス起動処理
 
+
+				Intent intent = new Intent(MainActivity.this, RadarActivity.class);
+				startActivity(intent);
 			}
 		});
 
@@ -35,7 +37,8 @@ public class MainActivity extends ActionBarActivity {
 		btnSetting.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+				Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+				startActivity(intent);
 			}
 		});
 	}

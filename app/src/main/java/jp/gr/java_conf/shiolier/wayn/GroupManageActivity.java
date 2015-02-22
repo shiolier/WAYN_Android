@@ -2,12 +2,9 @@ package jp.gr.java_conf.shiolier.wayn;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
 
 public class GroupManageActivity extends ActionBarActivity {
 
