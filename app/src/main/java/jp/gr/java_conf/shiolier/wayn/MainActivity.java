@@ -1,10 +1,11 @@
 package jp.gr.java_conf.shiolier.wayn;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
+import android.view.View;
+import android.widget.Button;
+import android.widget.ToggleButton;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -12,28 +13,34 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-	}
+
+		Button btnRadar = (Button)findViewById(R.id.btn_radar);
+		btnRadar.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// サービス起動処理
 
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_main, menu);
-		return true;
-	}
+				Intent intent = new Intent(MainActivity.this, RadarActivity.class);
+				startActivity(intent);
+			}
+		});
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
+		ToggleButton tglbtnPostLocation = (ToggleButton)findViewById(R.id.tglbtn_post_location_enable);
+		tglbtnPostLocation.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
 
-		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_settings) {
-			return true;
-		}
+			}
+		});
 
-		return super.onOptionsItemSelected(item);
+		Button btnSetting = (Button)findViewById(R.id.btn_setting);
+		btnSetting.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 }

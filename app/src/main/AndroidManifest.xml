@@ -16,6 +16,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".RadarActivity"
+            android:label="@string/title_activity_radar" >
+        </activity>
+        <activity
+            android:name=".SettingActivity"
+            android:label="@string/title_activity_setting" >
+        </activity>
+        <activity
+            android:name=".GroupSearchActivity"
+            android:label="@string/title_activity_group_search" >
+        </activity>
+        <activity
+            android:name=".GroupCreateActivity"
+            android:label="@string/title_activity_group_create" >
+        </activity>
+        <activity
+            android:name=".GroupManageActivity"
+            android:label="@string/title_activity_group_manage" >
+        </activity>
+        <activity
+            android:name=".DisplayGroupSettingActivity"
+            android:label="@string/title_activity_display_group_setting" >
+        </activity>
+        <activity
+            android:name=".GroupRequestListActivity"
+            android:label="@string/title_activity_group_request_list" >
+        </activity>
+        <activity
+            android:name=".GroupRequestDetailActivity"
+            android:label="@string/title_activity_group_request_detail" >
+        </activity>
     </application>
 
 </manifest>
