@@ -1,6 +1,5 @@
 package jp.gr.java_conf.shiolier.wayn.asynctask;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -18,39 +17,22 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import jp.gr.java_conf.shiolier.wayn.entity.User;
-import jp.gr.java_conf.shiolier.wayn.fragment.ProgressDialogFragment;
 
-public class UserRegistAsyncTask extends AsyncTask<String, Void, User> {
-	private static final String URL = "http://157.7.204.152:60000/users/regist.json";
+public class PostLocationAsyncTask extends AsyncTask<User, Void, User> {
+	private static final String URL = "http://157.7.204.152:60000/locations/update.json";
 
-	private Activity activity;
 	private OnPostExecuteListener listener;
-	private ProgressDialogFragment dialogFragment;
 
-	public UserRegistAsyncTask(Activity activity, OnPostExecuteListener listener) {
-		this.activity = activity;
+	public PostLocationAsyncTask(OnPostExecuteListener listener) {
 		this.listener = listener;
 	}
 
 	@Override
-	protected void onPreExecute() {
-		dialogFragment = ProgressDialogFragment.newInstance("初期化処理中", "しばらくお待ち下さい");
-		dialogFragment.show(activity.getFragmentManager(), "progress");
-	}
-
-	@Override
-	protected User doInBackground(String... params) {
+	protected User doInBackground(User... params) {
 		String data = null;
 
-		String postJsonStr = null;
-		try {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put(User.KEY_NAME, params[0]);
-			jsonObject.put(User.KEY_PASSWORD, params[1]);
-			postJsonStr = jsonObject.toString();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+		User user = params[0];
+		String postJsonStr = user.jsonStringForUpdateLocaiton();
 
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(URL);
@@ -66,7 +48,8 @@ public class UserRegistAsyncTask extends AsyncTask<String, Void, User> {
 				public String handleResponse(HttpResponse httpResponse) throws IOException {
 					int statusCode = httpResponse.getStatusLine().getStatusCode();
 					if (statusCode != 200) {
-						Log.w("MyLog", String.format("UserRegist statusCode: %d", statusCode));
+						Log.w("MyLog", String.format("PostLocation statusCode: %d", statusCode));
+						Log.w("MyLog", EntityUtils.toString(httpResponse.getEntity()));
 						return null;
 					}
 					return EntityUtils.toString(httpResponse.getEntity());
@@ -76,13 +59,12 @@ public class UserRegistAsyncTask extends AsyncTask<String, Void, User> {
 			e.printStackTrace();
 		}
 
-		User user = new User();
+
 		if (data == null)	return user;
 
 		try {
 			JSONObject jsonObject = new JSONObject(data);
-			user.setId(jsonObject.getInt(User.KEY_ID));
-			user.setCreatedAt(jsonObject.getInt(User.KEY_CREATED_AT));
+			user.setUpdatedLocationAt(jsonObject.getInt(User.KEY_UPDATED_LOCATION_AT));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -92,7 +74,6 @@ public class UserRegistAsyncTask extends AsyncTask<String, Void, User> {
 
 	@Override
 	protected void onPostExecute(User user) {
-		dialogFragment.getDialog().dismiss();
 		listener.onPostExecute(user);
 	}
 
