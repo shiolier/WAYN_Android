@@ -9,4 +9,6 @@
 	<string name="title_activity_group_create">GroupCreateActivity</string>
 	<string name="title_activity_group_manage">GroupManageActivity</string>
 	<string name="title_activity_display_group_setting">DisplayGroupSettingActivity</string>
+	<string name="title_activity_group_request_list">GroupRequestListActivity</string>
+	<string name="title_activity_group_request_detail">GroupRequestDetailActivity</string>
 </resources>

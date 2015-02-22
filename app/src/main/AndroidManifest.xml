@@ -40,6 +40,14 @@
             android:name=".DisplayGroupSettingActivity"
             android:label="@string/title_activity_display_group_setting" >
         </activity>
+        <activity
+            android:name=".GroupRequestListActivity"
+            android:label="@string/title_activity_group_request_list" >
+        </activity>
+        <activity
+            android:name=".GroupRequestDetailActivity"
+            android:label="@string/title_activity_group_request_detail" >
+        </activity>
     </application>
 
 </manifest>
