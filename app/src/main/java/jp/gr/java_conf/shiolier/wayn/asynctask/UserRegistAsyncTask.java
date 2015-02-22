@@ -1,12 +1,10 @@
 package jp.gr.java_conf.shiolier.wayn.asynctask;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
@@ -23,7 +21,7 @@ import jp.gr.java_conf.shiolier.wayn.entity.User;
 import jp.gr.java_conf.shiolier.wayn.fragment.ProgressDialogFragment;
 
 public class UserRegistAsyncTask extends AsyncTask<String, Void, User> {
-	private static final String URL = "http://v157-7-204-152.z1d5.static.cnode.jp:60000/user/regist.json";
+	private static final String URL = "http://157.7.204.152:60000/users/regist.json";
 
 	private Activity activity;
 	private OnPostExecuteListener listener;
@@ -79,6 +77,7 @@ public class UserRegistAsyncTask extends AsyncTask<String, Void, User> {
 		}
 
 		User user = new User();
+		if (data == null)	return user;
 
 		try {
 			JSONObject jsonObject = new JSONObject(data);
