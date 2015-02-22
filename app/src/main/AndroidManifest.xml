@@ -24,6 +24,10 @@
             android:name=".SettingActivity"
             android:label="@string/title_activity_setting" >
         </activity>
+        <activity
+            android:name=".GroupSearchActivity"
+            android:label="@string/title_activity_group_search" >
+        </activity>
     </application>
 
 </manifest>
