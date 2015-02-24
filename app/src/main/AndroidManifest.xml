@@ -61,7 +61,7 @@
         </service>
 
         <activity
-            android:name=".NameChangeActivity"
+            android:name=".UserNameChangeActivity"
             android:label="@string/title_activity_name_change" >
         </activity>
     </application>
