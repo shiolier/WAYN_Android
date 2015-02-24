@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import jp.gr.java_conf.shiolier.wayn.asynctask.UserNameUpdateAsyncTask;
+import jp.gr.java_conf.shiolier.wayn.entity.User;
 import jp.gr.java_conf.shiolier.wayn.util.MySharedPref;
 
 public class UserNameChangeActivity extends ActionBarActivity {
@@ -28,10 +29,10 @@ public class UserNameChangeActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				EditText edtName = (EditText)findViewById(R.id.edt_name);
-				String name = edtName.getText().toString();
+				final String name = edtName.getText().toString();
 
 				if (name.length() <= 1) {
-					Toast.makeText(UserNameChangeActivity.this, "2文字以上にしてください", Toast.LENGTH_SHORT);
+					Toast.makeText(UserNameChangeActivity.this, "2文字以上にしてください", Toast.LENGTH_SHORT).show();
 					return;
 				}
 
@@ -39,12 +40,21 @@ public class UserNameChangeActivity extends ActionBarActivity {
 					@Override
 					public void onPostExecute(boolean result) {
 						if (result) {
-							Toast.makeText(UserNameChangeActivity.this, "成功", Toast.LENGTH_SHORT);
+							Toast.makeText(UserNameChangeActivity.this, "成功", Toast.LENGTH_SHORT).show();
+							new MySharedPref(UserNameChangeActivity.this).setUserName(name);
 						} else {
-							Toast.makeText(UserNameChangeActivity.this, "失敗", Toast.LENGTH_SHORT);
+							Toast.makeText(UserNameChangeActivity.this, "失敗", Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
+
+				MySharedPref sharedPref = new MySharedPref(UserNameChangeActivity.this);
+				User user = new User();
+				user.setId(sharedPref.getUserId(0));
+				user.setPassword(sharedPref.getUserPassword(""));
+				user.setName(name);
+
+				asyncTask.execute(user);
 			}
 		});
 	}
