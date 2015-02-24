@@ -7,6 +7,7 @@ public class MySharedPref {
 	private static final String SHARED_PREF = "SHARED_PREF";
 
 	private static final String KEY_USER_ID = "USER_ID";
+	private static final String KEY_USER_NAME = "USER_NAME";
 	private static final String KEY_USER_PASSWORD = "USER_PASSWORD";
 
 	private SharedPreferences sharedPreferences;
@@ -25,6 +26,14 @@ public class MySharedPref {
 
 	public int getUserId(int defaultValue) {
 		return sharedPreferences.getInt(KEY_USER_ID, defaultValue);
+	}
+
+	public void setUserName(String name) {
+		sharedPreferences.edit().putString(KEY_USER_NAME, name).commit();
+	}
+
+	public String getUserName(String defaultValue) {
+		return sharedPreferences.getString(KEY_USER_NAME, defaultValue);
 	}
 
 	public void setUserPassword(String password) {
