@@ -124,6 +124,17 @@ public class User {
 		return jsonObject.toString();
 	}
 
+	public JSONObject jsonObjectIdAndPassword() {
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put(KEY_ID, id);
+			jsonObject.put(KEY_PASSWORD, password);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return jsonObject;
+	}
+
 	public String queryStringForAuthWhenGet() {
 		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair(KEY_ID, Integer.toString(id)));
