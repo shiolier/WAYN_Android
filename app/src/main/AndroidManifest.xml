@@ -11,15 +11,20 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+		<activity
+			android:name=".StartActivity"
+			android:label="@string/app_name"
+			android:launchMode="singleTask" >
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".RadarActivity"
@@ -53,6 +58,10 @@
             android:name=".GroupRequestDetailActivity"
             android:label="@string/title_activity_group_request_detail" >
         </activity>
+		<activity
+			android:name=".UserNameChangeActivity"
+			android:label="@string/title_activity_name_change" >
+		</activity>
 
         <service
             android:name=".service.PostLocationService"
@@ -60,10 +69,6 @@
             android:exported="false" >
         </service>
 
-        <activity
-            android:name=".UserNameChangeActivity"
-            android:label="@string/title_activity_name_change" >
-        </activity>
     </application>
 
 </manifest>

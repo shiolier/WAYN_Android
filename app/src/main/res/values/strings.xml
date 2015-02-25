@@ -11,6 +11,7 @@
 	<string name="title_activity_display_group_setting">表示グループ選択</string>
 	<string name="title_activity_group_request_list">加入申請リスト</string>
 	<string name="title_activity_group_request_detail">加入申請詳細</string>
+	<string name="title_activity_name_change">ユーザー名変更</string>
 
 	<string name="btn_radar">レーダー</string>
 	<string name="btn_setting">設定</string>
@@ -33,5 +34,4 @@
 	<string name="label_group_name">グループ名: </string>
 	<string name="label_leader_id">リーダーID: </string>
 	<string name="label_leader_name">リーダー名: </string>
-	<string name="title_activity_name_change">NameChangeActivity</string>
 </resources>

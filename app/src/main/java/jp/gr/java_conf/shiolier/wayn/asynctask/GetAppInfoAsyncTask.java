@@ -7,27 +7,25 @@ import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
-import jp.gr.java_conf.shiolier.wayn.entity.User;
+import jp.gr.java_conf.shiolier.wayn.entity.AppInfo;
 import jp.gr.java_conf.shiolier.wayn.fragment.ProgressDialogFragment;
 
-public class UserRegistAsyncTask extends AsyncTask<String, Void, User> {
-	private static final String URL = "http://157.7.204.152:60000/users/regist.json";
+public class GetAppInfoAsyncTask extends AsyncTask<Void, Void, AppInfo> {
+	private static final String URL = "http://157.7.204.152:60000/infos/version.json";
 
 	private Activity activity;
 	private OnPostExecuteListener listener;
 	private ProgressDialogFragment dialogFragment;
 
-	public UserRegistAsyncTask(Activity activity, OnPostExecuteListener listener) {
+	public GetAppInfoAsyncTask(Activity activity, OnPostExecuteListener listener) {
 		this.activity = activity;
 		this.listener = listener;
 	}
@@ -39,34 +37,19 @@ public class UserRegistAsyncTask extends AsyncTask<String, Void, User> {
 	}
 
 	@Override
-	protected User doInBackground(String... params) {
+	protected AppInfo doInBackground(Void... params) {
 		String data = null;
 
-		String postJsonStr = null;
-		try {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put(User.KEY_NAME, params[0]);
-			jsonObject.put(User.KEY_PASSWORD, params[1]);
-			postJsonStr = jsonObject.toString();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(URL);
-		try {
-			httpPost.setEntity(new StringEntity(postJsonStr, "UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		HttpGet httpGet = new HttpGet(URL);
 
 		try {
-			data = httpClient.execute(httpPost, new ResponseHandler<String>() {
+			data = httpClient.execute(httpGet, new ResponseHandler<String>() {
 				@Override
 				public String handleResponse(HttpResponse httpResponse) throws IOException {
 					int statusCode = httpResponse.getStatusLine().getStatusCode();
 					if (statusCode != 200) {
-						Log.w("MyLog", String.format("UserRegist statusCode: %d", statusCode));
+						Log.w("MyLog", String.format("GetAppInfo statusCode: %d", statusCode));
 						Log.w("MyLog", EntityUtils.toString(httpResponse.getEntity()));
 						return null;
 					}
@@ -77,27 +60,27 @@ public class UserRegistAsyncTask extends AsyncTask<String, Void, User> {
 			e.printStackTrace();
 		}
 
-		User user = new User();
-		if (data == null)	return user;
+		AppInfo appInfo = new AppInfo();
+		if (data == null)	return appInfo;
 
 		try {
 			JSONObject jsonObject = new JSONObject(data);
-			user.setId(jsonObject.getInt(User.KEY_ID));
-			user.setCreatedAt(jsonObject.getInt(User.KEY_CREATED_AT));
+			appInfo.setVersionCode(jsonObject.getInt(AppInfo.KEY_VERSION_CODE));
+			appInfo.setVersionName(jsonObject.getString(AppInfo.KEY_VERSION_NAME));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
-		return user;
+		return appInfo;
 	}
 
 	@Override
-	protected void onPostExecute(User user) {
+	protected void onPostExecute(AppInfo appInfo) {
 		dialogFragment.getDialog().dismiss();
-		listener.onPostExecute(user);
+		listener.onPostExecute(appInfo);
 	}
 
 	public interface OnPostExecuteListener {
-		void onPostExecute(User user);
+		void onPostExecute(AppInfo appInfo);
 	}
 }
