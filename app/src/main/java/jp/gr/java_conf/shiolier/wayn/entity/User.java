@@ -109,6 +109,18 @@ public class User {
 		this.createdAt = createdAt;
 	}
 
+	public String jsonStringForUserRegister() {
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put(KEY_NAME, name);
+			jsonObject.put(KEY_PASSWORD, password);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return "";
+		}
+		return jsonObject.toString();
+	}
+
 	public String jsonStringForUpdateLocaiton() {
 		JSONObject jsonObject = new JSONObject();
 		try {
@@ -122,6 +134,17 @@ public class User {
 			return "";
 		}
 		return jsonObject.toString();
+	}
+
+	public JSONObject jsonObjectIdAndPassword() {
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put(KEY_ID, id);
+			jsonObject.put(KEY_PASSWORD, password);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return jsonObject;
 	}
 
 	public String queryStringForAuthWhenGet() {

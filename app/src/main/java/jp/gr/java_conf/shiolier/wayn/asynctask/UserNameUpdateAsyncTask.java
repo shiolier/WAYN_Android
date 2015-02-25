@@ -20,33 +20,32 @@ import java.io.UnsupportedEncodingException;
 import jp.gr.java_conf.shiolier.wayn.entity.User;
 import jp.gr.java_conf.shiolier.wayn.fragment.ProgressDialogFragment;
 
-public class UserRegistAsyncTask extends AsyncTask<String, Void, User> {
-	private static final String URL = "http://157.7.204.152:60000/users/regist.json";
+public class UserNameUpdateAsyncTask extends AsyncTask<User, Void, Boolean> {
+	private static final String URL = "http://157.7.204.152:60000/users/update_name.json";
 
 	private Activity activity;
 	private OnPostExecuteListener listener;
 	private ProgressDialogFragment dialogFragment;
 
-	public UserRegistAsyncTask(Activity activity, OnPostExecuteListener listener) {
+	public UserNameUpdateAsyncTask(Activity activity, OnPostExecuteListener listener) {
 		this.activity = activity;
 		this.listener = listener;
 	}
 
 	@Override
 	protected void onPreExecute() {
-		dialogFragment = ProgressDialogFragment.newInstance("初期化処理中", "しばらくお待ち下さい");
+		dialogFragment = ProgressDialogFragment.newInstance("名前変更中", "しばらくお待ち下さい");
 		dialogFragment.show(activity.getFragmentManager(), "progress");
 	}
 
 	@Override
-	protected User doInBackground(String... params) {
+	protected Boolean doInBackground(User... params) {
 		String data = null;
 
 		String postJsonStr = null;
+		JSONObject jsonObject = params[0].jsonObjectIdAndPassword();
 		try {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put(User.KEY_NAME, params[0]);
-			jsonObject.put(User.KEY_PASSWORD, params[1]);
+			jsonObject.put(User.KEY_NAME, params[0].getName());
 			postJsonStr = jsonObject.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -66,7 +65,8 @@ public class UserRegistAsyncTask extends AsyncTask<String, Void, User> {
 				public String handleResponse(HttpResponse httpResponse) throws IOException {
 					int statusCode = httpResponse.getStatusLine().getStatusCode();
 					if (statusCode != 200) {
-						Log.w("MyLog", String.format("UserRegist statusCode: %d", statusCode));
+						Log.w("MyLog", String.format("UserNameUpdate statusCode: %d", statusCode));
+						Log.w("MyLog", EntityUtils.toString(httpResponse.getEntity()));
 						return null;
 					}
 					return EntityUtils.toString(httpResponse.getEntity());
@@ -76,27 +76,26 @@ public class UserRegistAsyncTask extends AsyncTask<String, Void, User> {
 			e.printStackTrace();
 		}
 
-		User user = new User();
-		if (data == null)	return user;
+		if (data == null)	return false;
 
+		boolean result = false;
 		try {
-			JSONObject jsonObject = new JSONObject(data);
-			user.setId(jsonObject.getInt(User.KEY_ID));
-			user.setCreatedAt(jsonObject.getInt(User.KEY_CREATED_AT));
+			jsonObject = new JSONObject(data);
+			result = jsonObject.getBoolean("result");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
-		return user;
+		return result;
 	}
 
 	@Override
-	protected void onPostExecute(User user) {
+	protected void onPostExecute(Boolean result) {
 		dialogFragment.getDialog().dismiss();
-		listener.onPostExecute(user);
+		listener.onPostExecute(result);
 	}
 
 	public interface OnPostExecuteListener {
-		void onPostExecute(User user);
+		void onPostExecute(boolean result);
 	}
 }

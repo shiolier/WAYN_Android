@@ -17,6 +17,7 @@ public class SettingActivity extends ActionBarActivity {
 
 		ListView listView = (ListView)findViewById(R.id.list_view);
 		listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{
+				"名前を変更",
 				"グループに入る",
 				"グループを作る",
 				"グループを管理",
@@ -26,14 +27,18 @@ public class SettingActivity extends ActionBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (position == 0) {
+					// 名前を変更
+					Intent intent = new Intent(SettingActivity.this, UserNameChangeActivity.class);
+					startActivity(intent);
+				} else if (position == 1) {
 					// グループに入る
 					Intent intent = new Intent(SettingActivity.this, GroupSearchActivity.class);
 					startActivity(intent);
-				} else if (position == 1) {
+				} else if (position == 2) {
 					// グループを作る
 					Intent intent = new Intent(SettingActivity.this, GroupCreateActivity.class);
 					startActivity(intent);
-				} else if (position == 2) {
+				} else if (position == 3) {
 					// グループを管理
 					Intent intent = new Intent(SettingActivity.this, GroupManageActivity.class);
 					startActivity(intent);
