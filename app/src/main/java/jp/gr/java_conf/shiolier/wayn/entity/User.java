@@ -31,6 +31,7 @@ public class User {
 	private double altitude;
 	private long updatedLocationAt;
 	private long createdAt;
+	private boolean existLocation;
 
 	public User() {
 	}
@@ -55,13 +56,15 @@ public class User {
 	}
 
 	public User(JSONObject jsonObject) throws JSONException {
-		id = jsonObject.getInt(KEY_ID);
-		name = jsonObject.getString(KEY_NAME);
-		latitude = jsonObject.getDouble(KEY_LATITUDE);
-		longitude = jsonObject.getDouble(KEY_LONGITUDE);
-		altitude = jsonObject.getDouble(KEY_ALTITUDE);
-		updatedLocationAt = jsonObject.getLong(KEY_UPDATED_LOCATION_AT);
-		createdAt = jsonObject.getLong(KEY_CREATED_AT);
+		try {
+			id = jsonObject.getInt(KEY_ID);
+			name = jsonObject.getString(KEY_NAME);
+			setLocation(jsonObject);
+			updatedLocationAt = jsonObject.getLong(KEY_UPDATED_LOCATION_AT);
+			createdAt = jsonObject.getLong(KEY_CREATED_AT);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public int getId() {
@@ -126,6 +129,25 @@ public class User {
 
 	public void setCreatedAt(long createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public boolean getExistLocation() {
+		return existLocation;
+	}
+
+	public void setLocation(JSONObject jsonObject) {
+		try {
+			latitude = jsonObject.getDouble(KEY_LATITUDE);
+			longitude = jsonObject.getDouble(KEY_LONGITUDE);
+			altitude = jsonObject.getDouble(KEY_ALTITUDE);
+			existLocation = true;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			existLocation = false;
+			latitude = 0.0;
+			longitude = 0.0;
+			altitude = 0.0;
+		}
 	}
 
 	public String jsonStringForUserRegister() {
