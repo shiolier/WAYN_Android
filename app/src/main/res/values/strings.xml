@@ -23,6 +23,7 @@
 	<string name="btn_reject">拒否</string>
 	<string name="btn_search">検索</string>
 	<string name="btn_request">加入申請</string>
+	<string name="btn_leave">グループを抜ける</string>
 	<string name="tglbtn_post_location_enable_on">位置情報送信 ON</string>
 	<string name="tglbtn_post_location_enable_off">位置情報送信 OFF</string>
 	<string name="edt_name_hint">ユーザー名</string>
@@ -34,4 +35,6 @@
 	<string name="label_group_name">グループ名: </string>
 	<string name="label_leader_id">リーダーID: </string>
 	<string name="label_leader_name">リーダー名: </string>
+	<string name="title_activity_group_manage_leader">GroupManageLeaderActivity</string>
+	<string name="title_activity_group_manage_memper">GroupManageMemperActivity</string>
 </resources>

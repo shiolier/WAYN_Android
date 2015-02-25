@@ -8,12 +8,13 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import jp.gr.java_conf.shiolier.wayn.util.LocationCalc;
 import jp.gr.java_conf.shiolier.wayn.util.Point2D;
 
-public class User {
+public class User implements Serializable {
 	public static final String KEY_ID = "id";
 	public static final String KEY_NAME = "name";
 	public static final String KEY_PASSWORD = "password";

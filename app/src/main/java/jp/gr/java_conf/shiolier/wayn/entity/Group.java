@@ -3,7 +3,9 @@ package jp.gr.java_conf.shiolier.wayn.entity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Group {
+import java.io.Serializable;
+
+public class Group implements Serializable {
 	public static final String KEY_ID = "id";
 	public static final String KEY_NAME = "name";
 	public static final String KEY_LEADER = "leader";
