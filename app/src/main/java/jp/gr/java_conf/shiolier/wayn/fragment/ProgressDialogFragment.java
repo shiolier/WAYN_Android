@@ -6,7 +6,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 
 public class ProgressDialogFragment extends DialogFragment {
-	private static ProgressDialog progressDialog = null;
+	private ProgressDialog progressDialog = null;
 
 	public static ProgressDialogFragment newInstance(String title, String message) {
 		ProgressDialogFragment instance = new ProgressDialogFragment();

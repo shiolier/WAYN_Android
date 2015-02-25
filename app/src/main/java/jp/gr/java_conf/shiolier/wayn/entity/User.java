@@ -45,6 +45,20 @@ public class User {
 		this.createdAt = createdAt;
 	}
 
+	public User(String jsonString) throws JSONException {
+		this(new JSONObject(jsonString));
+	}
+
+	public User(JSONObject jsonObject) throws JSONException {
+		id = jsonObject.getInt(KEY_ID);
+		name = jsonObject.getString(KEY_NAME);
+		latitude = jsonObject.getDouble(KEY_LATITUDE);
+		longitude = jsonObject.getDouble(KEY_LONGITUDE);
+		altitude = jsonObject.getDouble(KEY_ALTITUDE);
+		updatedLocationAt = jsonObject.getLong(KEY_UPDATED_LOCATION_AT);
+		createdAt = jsonObject.getLong(KEY_CREATED_AT);
+	}
+
 	public int getId() {
 		return id;
 	}
