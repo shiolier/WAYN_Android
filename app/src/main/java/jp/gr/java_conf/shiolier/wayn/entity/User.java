@@ -35,6 +35,11 @@ public class User {
 	public User() {
 	}
 
+	public User(int id, String password) {
+		this.id = id;
+		this.password = password;
+	}
+
 	public User(int id, String name, String password, double latitude, double longitude, double altitude, int updatedLocationAt, int createdAt) {
 		this.id = id;
 		this.name = name;

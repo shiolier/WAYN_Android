@@ -66,4 +66,21 @@ public class Group {
 	public void setCreatedAt(long createdAt) {
 		this.createdAt = createdAt;
 	}
+
+	public void setForGroupCreate(String groupName, int userId, String userPassword) {
+		name = groupName;
+		leader = new User(userId, userPassword);
+	}
+
+	public String jsonStringForCreateGroup() {
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put(User.KEY_ID, leader.getId());
+			jsonObject.put(User.KEY_PASSWORD, leader.getPassword());
+			jsonObject.put("group_name", name);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return jsonObject.toString();
+	}
 }

@@ -180,7 +180,13 @@ public class StartActivity extends ActionBarActivity {
 				}
 			}
 		});
-		asyncTask.execute();
+
+		MySharedPref mySharedPref = new MySharedPref(this);
+
+		Group group = new Group();
+		group.setForGroupCreate(groupName, mySharedPref.getUserId(0), mySharedPref.getUserPassword(""));
+
+		asyncTask.execute(group);
 	}
 
 	private void startMainActivity() {
