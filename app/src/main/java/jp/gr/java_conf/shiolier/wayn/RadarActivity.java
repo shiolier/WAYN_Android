@@ -1,11 +1,14 @@
 package jp.gr.java_conf.shiolier.wayn;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import jp.gr.java_conf.shiolier.wayn.util.MySharedPref;
 import jp.gr.java_conf.shiolier.wayn.view.RadarView;
 
 public class RadarActivity extends ActionBarActivity {
@@ -21,6 +24,26 @@ public class RadarActivity extends ActionBarActivity {
 		radarView = (RadarView)findViewById(R.id.radar_view);
 	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if ((keyCode == KeyEvent.KEYCODE_MENU) &&
+				(Build.VERSION.SDK_INT <= 16) &&
+				(Build.MANUFACTURER.compareTo("LGE") == 0)) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if ((keyCode == KeyEvent.KEYCODE_MENU) &&
+				(Build.VERSION.SDK_INT <= 16) &&
+				(Build.MANUFACTURER.compareTo("LGE") == 0)) {
+			openOptionsMenu();
+			return true;
+		}
+		return super.onKeyUp(keyCode, event);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,6 +70,8 @@ public class RadarActivity extends ActionBarActivity {
 
 		if (requestCode == REQUEST_GROUP_SELECT && resultCode == RESULT_OK) {
 			int groupId = data.getIntExtra(DisplayGroupSettingActivity.KEY_GROUP_ID, 0);
+			new MySharedPref(this).setRadarGroupId(groupId);
+			radarView.setGroupId(groupId);
 		}
 	}
 }

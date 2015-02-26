@@ -43,7 +43,9 @@ public class GetGroupLocationsAsyncTask extends AsyncTask<User, Void, ArrayList<
 					int statusCode = httpResponse.getStatusLine().getStatusCode();
 					if (statusCode != 200) {
 						Log.w("MyLog", String.format("GetGroupLocations statusCode: %d", statusCode));
-						Log.w("MyLog", EntityUtils.toString(httpResponse.getEntity()));
+						if (statusCode != 204) {
+							Log.w("MyLog", EntityUtils.toString(httpResponse.getEntity()));
+						}
 						return null;
 					}
 					return EntityUtils.toString(httpResponse.getEntity());
