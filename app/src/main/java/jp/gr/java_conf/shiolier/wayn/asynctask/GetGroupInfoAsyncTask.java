@@ -11,25 +11,25 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import jp.gr.java_conf.shiolier.wayn.entity.Group;
 import jp.gr.java_conf.shiolier.wayn.entity.User;
 import jp.gr.java_conf.shiolier.wayn.fragment.ProgressDialogFragment;
 
-public class GetBelongGroupAsyncTask extends AsyncTask<User, Void, ArrayList<Group>> {
-	private static final String URL = "http://157.7.204.152:60000/groups/belong.json";
+public class GetGroupInfoAsyncTask extends AsyncTask<User, Void, Group> {
+	private static final String URL = "http://157.7.204.152:60000/groups/info/";
 
+	private int groupId;
 	private Activity activity;
 	private OnPostExecuteListener listener;
 	private ProgressDialogFragment dialogFragment;
 
-	public GetBelongGroupAsyncTask(Activity activity, OnPostExecuteListener listener) {
+	public GetGroupInfoAsyncTask(int groupId, Activity activity, OnPostExecuteListener listener) {
+		this.groupId = groupId;
 		this.activity = activity;
 		this.listener = listener;
 	}
@@ -41,11 +41,11 @@ public class GetBelongGroupAsyncTask extends AsyncTask<User, Void, ArrayList<Gro
 	}
 
 	@Override
-	protected ArrayList<Group> doInBackground(User... params) {
+	protected Group doInBackground(User... params) {
 		String data = null;
 
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet(URL + "?" + params[0].queryStringForAuthWhenGet());
+		HttpGet httpGet = new HttpGet(URL + groupId + ".json?" + params[0].queryStringForAuthWhenGet());
 
 		try {
 			data = httpClient.execute(httpGet, new ResponseHandler<String>() {
@@ -64,29 +64,26 @@ public class GetBelongGroupAsyncTask extends AsyncTask<User, Void, ArrayList<Gro
 			e.printStackTrace();
 		}
 
-		ArrayList<Group> groupList = new ArrayList<>();
-		if (data == null)	return groupList;
+		if (data == null)	return new Group();
 
+		Group group;
 		try {
-			JSONArray jsonArray = new JSONArray(data);
-			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject groupJson = jsonArray.getJSONObject(i);
-				groupList.add(new Group(groupJson));
-			}
+			group = new Group(new JSONObject(data));
 		} catch (JSONException e) {
 			e.printStackTrace();
+			group = new Group();
 		}
 
-		return groupList;
+		return group;
 	}
 
 	@Override
-	protected void onPostExecute(ArrayList<Group> groupList) {
+	protected void onPostExecute(Group group) {
 		dialogFragment.getDialog().dismiss();
-		listener.onPostExecute(groupList);
+		listener.onPostExecute(group);
 	}
 
 	public interface OnPostExecuteListener {
-		void onPostExecute(ArrayList<Group> groupList);
+		void onPostExecute(Group group);
 	}
 }

@@ -87,7 +87,7 @@
 			android:layout_height="wrap_content"
 			android:text=""
 			android:textSize="24sp"
-			android:id="@+id/txt_leader"/>
+			android:id="@+id/txt_leader_id"/>
 
 	</LinearLayout>
 

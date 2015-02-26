@@ -22,13 +22,13 @@
 	<string name="btn_approve">承認</string>
 	<string name="btn_reject">拒否</string>
 	<string name="btn_search">検索</string>
-	<string name="btn_request">加入申請</string>
+	<string name="btn_request">グループ参加申請</string>
 	<string name="btn_leave">グループを抜ける</string>
 	<string name="tglbtn_post_location_enable_on">位置情報送信 ON</string>
 	<string name="tglbtn_post_location_enable_off">位置情報送信 OFF</string>
 	<string name="edt_name_hint">ユーザー名</string>
 	<string name="edt_group_name_hint">グループ名</string>
-	<string name="edt_group_id_hint">グループ名</string>
+	<string name="edt_group_id_hint">グループID</string>
 	<string name="label_user_id">ユーザーID: </string>
 	<string name="label_user_name">ユーザー名: </string>
 	<string name="label_group_id">グループID: </string>
