@@ -1,5 +1,6 @@
 package jp.gr.java_conf.shiolier.wayn.asynctask;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -16,21 +17,33 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import jp.gr.java_conf.shiolier.wayn.entity.Group;
+import jp.gr.java_conf.shiolier.wayn.entity.GroupRequest;
 import jp.gr.java_conf.shiolier.wayn.entity.User;
+import jp.gr.java_conf.shiolier.wayn.fragment.ProgressDialogFragment;
 
-public class GetGroupLocationsAsyncTask extends AsyncTask<User, Void, ArrayList<User>> {
-	private static final String URL = "http://157.7.204.152:60000/locations/group/";
+public class GetGroupRequestsAsyncTask extends AsyncTask<User, Void, ArrayList<GroupRequest>> {
+	private static final String URL = "http://157.7.204.152:60000/groups/request/";
 
 	private int groupId;
+	private Activity activity;
 	private OnPostExecuteListener listener;
+	private ProgressDialogFragment dialogFragment;
 
-	public GetGroupLocationsAsyncTask(int groupId, OnPostExecuteListener listener) {
+	public GetGroupRequestsAsyncTask(int groupId, Activity activity, OnPostExecuteListener listener) {
 		this.groupId = groupId;
+		this.activity = activity;
 		this.listener = listener;
 	}
 
 	@Override
-	protected ArrayList<User> doInBackground(User... params) {
+	protected void onPreExecute() {
+		dialogFragment = ProgressDialogFragment.newInstance("通信中", "しばらくお待ち下さい");
+		dialogFragment.show(activity.getFragmentManager(), "progress");
+	}
+
+	@Override
+	protected ArrayList<GroupRequest> doInBackground(User... params) {
 		String data = null;
 
 		HttpClient httpClient = new DefaultHttpClient();
@@ -42,8 +55,8 @@ public class GetGroupLocationsAsyncTask extends AsyncTask<User, Void, ArrayList<
 				public String handleResponse(HttpResponse httpResponse) throws IOException {
 					int statusCode = httpResponse.getStatusLine().getStatusCode();
 					if (statusCode != 200) {
-						Log.w("MyLog", String.format("GetGroupLocations statusCode: %d", statusCode));
-						if (statusCode != 204) {
+						Log.w("MyLog", String.format("GetGroupRequests statusCode: %d", statusCode));
+						if (httpResponse.getEntity() != null) {
 							Log.w("MyLog", EntityUtils.toString(httpResponse.getEntity()));
 						}
 						return null;
@@ -55,39 +68,30 @@ public class GetGroupLocationsAsyncTask extends AsyncTask<User, Void, ArrayList<
 			e.printStackTrace();
 		}
 
-		ArrayList<User> userList = new ArrayList<>();
-
-		if (data == null)	return userList;
+		ArrayList<GroupRequest> requestList = new ArrayList<>();
+		if (data == null)	return requestList;
 
 		try {
 			JSONArray jsonArray = new JSONArray(data);
 			for (int i = 0; i < jsonArray.length(); i++) {
-				User user = new User();
-
-				JSONObject userJson = jsonArray.getJSONObject(i);
-				user.setId(userJson.getInt(User.KEY_ID));
-				user.setName(userJson.getString(User.KEY_NAME));
-				user.setLatitude(userJson.getDouble(User.KEY_LATITUDE));
-				user.setLongitude(userJson.getDouble(User.KEY_LONGITUDE));
-				user.setAltitude(userJson.getDouble(User.KEY_ALTITUDE));
-				user.setUpdatedLocationAt(userJson.getLong(User.KEY_UPDATED_LOCATION_AT));
-				user.setCreatedAt(userJson.getLong(User.KEY_CREATED_AT));
-
-				userList.add(user);
+				JSONObject requestJson = jsonArray.getJSONObject(i);
+				GroupRequest request = new GroupRequest(requestJson);
+				requestList.add(request);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
-		return userList;
+		return requestList;
 	}
 
 	@Override
-	protected void onPostExecute(ArrayList<User> userList) {
-		listener.onPostExecute(userList);
+	protected void onPostExecute(ArrayList<GroupRequest> requestList) {
+		dialogFragment.getDialog().dismiss();
+		listener.onPostExecute(requestList);
 	}
 
 	public interface OnPostExecuteListener {
-		void onPostExecute(ArrayList<User> userList);
+		void onPostExecute(ArrayList<GroupRequest> requestList);
 	}
 }

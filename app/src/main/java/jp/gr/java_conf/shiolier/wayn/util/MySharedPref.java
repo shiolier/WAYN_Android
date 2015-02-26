@@ -3,12 +3,15 @@ package jp.gr.java_conf.shiolier.wayn.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import jp.gr.java_conf.shiolier.wayn.entity.User;
+
 public class MySharedPref {
 	private static final String SHARED_PREF = "SHARED_PREF";
 
 	private static final String KEY_USER_ID = "USER_ID";
 	private static final String KEY_USER_NAME = "USER_NAME";
 	private static final String KEY_USER_PASSWORD = "USER_PASSWORD";
+	private static final String KEY_GROUP_ID = "GROUP_ID";
 
 	private SharedPreferences sharedPreferences;
 
@@ -42,5 +45,21 @@ public class MySharedPref {
 
 	public String getUserPassword(String defaultValue) {
 		return sharedPreferences.getString(KEY_USER_PASSWORD, defaultValue);
+	}
+
+	public void setRadarGroupId(int groupId) {
+		sharedPreferences.edit().putInt(KEY_GROUP_ID, groupId).commit();
+	}
+
+	public int getRadarGroupId(int defaultValue) {
+		return sharedPreferences.getInt(KEY_GROUP_ID, defaultValue);
+	}
+
+	public User getUser() {
+		User user = new User();
+		user.setId(getUserId(0));
+		user.setPassword(getUserPassword(""));
+		user.setName(getUserName(""));
+		return user;
 	}
 }
