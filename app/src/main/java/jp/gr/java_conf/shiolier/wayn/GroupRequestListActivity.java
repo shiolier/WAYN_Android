@@ -20,6 +20,8 @@ import jp.gr.java_conf.shiolier.wayn.util.MySharedPref;
 
 public class GroupRequestListActivity extends ActionBarActivity {
 	public static final String EXTRA_GROUP_REQUEST = "GROUP_REQUEST";
+	public static final int REQUEST_DETAIL = 0x10;
+	public static final int RESULT_CHANGED = 0x11;
 
 	private int groupId;
 
@@ -40,11 +42,20 @@ public class GroupRequestListActivity extends ActionBarActivity {
 
 				Intent intent = new Intent(GroupRequestListActivity.this, GroupRequestDetailActivity.class);
 				intent.putExtra(EXTRA_GROUP_REQUEST, request);
-				startActivity(intent);
+				startActivityForResult(intent, REQUEST_DETAIL);
 			}
 		});
 
 		getRequests();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == REQUEST_DETAIL && resultCode == RESULT_CHANGED) {
+			getRequests();
+		}
 	}
 
 	private void getRequests() {
