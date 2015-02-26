@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import jp.gr.java_conf.shiolier.wayn.entity.GroupRequest;
+
 
 public class GroupRequestDetailActivity extends ActionBarActivity {
 
@@ -16,12 +18,13 @@ public class GroupRequestDetailActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_group_request_detail);
 
 		Intent intent = getIntent();
+		GroupRequest request = (GroupRequest)intent.getSerializableExtra(GroupRequestListActivity.EXTRA_GROUP_REQUEST);
 
 		TextView txtUserId = (TextView)findViewById(R.id.txt_user_id);
-		txtUserId.setText(Integer.toString(intent.getIntExtra(GroupRequestListActivity.KEY_USER_ID, 0)));
+		txtUserId.setText(Integer.toString(request.getUser().getId()));
 
 		TextView txtUserName = (TextView)findViewById(R.id.txt_user_name);
-		txtUserName.setText(intent.getStringExtra(GroupRequestListActivity.KEY_USER_NAME));
+		txtUserName.setText(request.getUser().getName());
 
 		Button btnApprove = (Button)findViewById(R.id.btn_approve);
 		btnApprove.setOnClickListener(new View.OnClickListener() {

@@ -18,17 +18,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import jp.gr.java_conf.shiolier.wayn.entity.Group;
+import jp.gr.java_conf.shiolier.wayn.entity.GroupRequest;
 import jp.gr.java_conf.shiolier.wayn.entity.User;
 import jp.gr.java_conf.shiolier.wayn.fragment.ProgressDialogFragment;
 
-public class GetBelongGroupAsyncTask extends AsyncTask<User, Void, ArrayList<Group>> {
-	private static final String URL = "http://157.7.204.152:60000/groups/belong.json";
+public class GetGroupRequestsAsyncTask extends AsyncTask<User, Void, ArrayList<GroupRequest>> {
+	private static final String URL = "http://157.7.204.152:60000/groups/request/";
 
+	private int groupId;
 	private Activity activity;
 	private OnPostExecuteListener listener;
 	private ProgressDialogFragment dialogFragment;
 
-	public GetBelongGroupAsyncTask(Activity activity, OnPostExecuteListener listener) {
+	public GetGroupRequestsAsyncTask(int groupId, Activity activity, OnPostExecuteListener listener) {
+		this.groupId = groupId;
 		this.activity = activity;
 		this.listener = listener;
 	}
@@ -40,11 +43,11 @@ public class GetBelongGroupAsyncTask extends AsyncTask<User, Void, ArrayList<Gro
 	}
 
 	@Override
-	protected ArrayList<Group> doInBackground(User... params) {
+	protected ArrayList<GroupRequest> doInBackground(User... params) {
 		String data = null;
 
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet(URL + "?" + params[0].queryStringForAuthWhenGet());
+		HttpGet httpGet = new HttpGet(URL + groupId + ".json?" + params[0].queryStringForAuthWhenGet());
 
 		try {
 			data = httpClient.execute(httpGet, new ResponseHandler<String>() {
@@ -52,8 +55,10 @@ public class GetBelongGroupAsyncTask extends AsyncTask<User, Void, ArrayList<Gro
 				public String handleResponse(HttpResponse httpResponse) throws IOException {
 					int statusCode = httpResponse.getStatusLine().getStatusCode();
 					if (statusCode != 200) {
-						Log.w("MyLog", String.format("GetBelongGroup statusCode: %d", statusCode));
-						Log.w("MyLog", EntityUtils.toString(httpResponse.getEntity()));
+						Log.w("MyLog", String.format("GetGroupRequests statusCode: %d", statusCode));
+						if (httpResponse.getEntity() != null) {
+							Log.w("MyLog", EntityUtils.toString(httpResponse.getEntity()));
+						}
 						return null;
 					}
 					return EntityUtils.toString(httpResponse.getEntity());
@@ -63,29 +68,30 @@ public class GetBelongGroupAsyncTask extends AsyncTask<User, Void, ArrayList<Gro
 			e.printStackTrace();
 		}
 
-		ArrayList<Group> groupList = new ArrayList<>();
-		if (data == null)	return groupList;
+		ArrayList<GroupRequest> requestList = new ArrayList<>();
+		if (data == null)	return requestList;
 
 		try {
 			JSONArray jsonArray = new JSONArray(data);
 			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject groupJson = jsonArray.getJSONObject(i);
-				groupList.add(new Group(groupJson));
+				JSONObject requestJson = jsonArray.getJSONObject(i);
+				GroupRequest request = new GroupRequest(requestJson);
+				requestList.add(request);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
-		return groupList;
+		return requestList;
 	}
 
 	@Override
-	protected void onPostExecute(ArrayList<Group> groupList) {
+	protected void onPostExecute(ArrayList<GroupRequest> requestList) {
 		dialogFragment.getDialog().dismiss();
-		listener.onPostExecute(groupList);
+		listener.onPostExecute(requestList);
 	}
 
 	public interface OnPostExecuteListener {
-		void onPostExecute(ArrayList<Group> groupList);
+		void onPostExecute(ArrayList<GroupRequest> requestList);
 	}
 }
