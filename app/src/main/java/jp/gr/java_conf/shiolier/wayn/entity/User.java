@@ -8,12 +8,13 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import jp.gr.java_conf.shiolier.wayn.util.LocationCalc;
 import jp.gr.java_conf.shiolier.wayn.util.Point2D;
 
-public class User {
+public class User implements Serializable {
 	public static final String KEY_ID = "id";
 	public static final String KEY_NAME = "name";
 	public static final String KEY_PASSWORD = "password";
@@ -31,8 +32,14 @@ public class User {
 	private double altitude;
 	private long updatedLocationAt;
 	private long createdAt;
+	private boolean existLocation;
 
 	public User() {
+	}
+
+	public User(int id, String password) {
+		this.id = id;
+		this.password = password;
 	}
 
 	public User(int id, String name, String password, double latitude, double longitude, double altitude, int updatedLocationAt, int createdAt) {
@@ -43,6 +50,22 @@ public class User {
 		this.altitude = altitude;
 		this.updatedLocationAt = updatedLocationAt;
 		this.createdAt = createdAt;
+	}
+
+	public User(String jsonString) throws JSONException {
+		this(new JSONObject(jsonString));
+	}
+
+	public User(JSONObject jsonObject) throws JSONException {
+		try {
+			id = jsonObject.getInt(KEY_ID);
+			name = jsonObject.getString(KEY_NAME);
+			setLocation(jsonObject);
+			updatedLocationAt = jsonObject.getLong(KEY_UPDATED_LOCATION_AT);
+			createdAt = jsonObject.getLong(KEY_CREATED_AT);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public int getId() {
@@ -109,6 +132,37 @@ public class User {
 		this.createdAt = createdAt;
 	}
 
+	public boolean getExistLocation() {
+		return existLocation;
+	}
+
+	public void setLocation(JSONObject jsonObject) {
+		try {
+			latitude = jsonObject.getDouble(KEY_LATITUDE);
+			longitude = jsonObject.getDouble(KEY_LONGITUDE);
+			altitude = jsonObject.getDouble(KEY_ALTITUDE);
+			existLocation = true;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			existLocation = false;
+			latitude = 0.0;
+			longitude = 0.0;
+			altitude = 0.0;
+		}
+	}
+
+	public String jsonStringForUserRegister() {
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put(KEY_NAME, name);
+			jsonObject.put(KEY_PASSWORD, password);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return "";
+		}
+		return jsonObject.toString();
+	}
+
 	public String jsonStringForUpdateLocaiton() {
 		JSONObject jsonObject = new JSONObject();
 		try {
@@ -122,6 +176,17 @@ public class User {
 			return "";
 		}
 		return jsonObject.toString();
+	}
+
+	public JSONObject jsonObjectIdAndPassword() {
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put(KEY_ID, id);
+			jsonObject.put(KEY_PASSWORD, password);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return jsonObject;
 	}
 
 	public String queryStringForAuthWhenGet() {

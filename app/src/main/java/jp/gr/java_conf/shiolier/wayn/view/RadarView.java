@@ -40,7 +40,7 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 	private ScaleGestureDetector.SimpleOnScaleGestureListener onScaleGestureListener = new MyOnScaleGestureListener();
 	private ScaleGestureDetector scaleGestureDetector;
 
-	private int groupId = 1;
+	private int groupId;
 	private int screenWidth;
 	private int screenHeight;
 	private int meter = 100;
@@ -72,6 +72,7 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 		MySharedPref mySharedPref = new MySharedPref(context);
 		userId = mySharedPref.getUserId(0);
 		userPassword = mySharedPref.getUserPassword("");
+		groupId = mySharedPref.getRadarGroupId(0);
 
 		scaleGestureDetector = new ScaleGestureDetector(context, onScaleGestureListener);
 
@@ -148,7 +149,8 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 		if (userList != null) {
 			paint.setColor(Color.GREEN);
 			for (User user : userList) {
-				if (user.getUpdatedLocationAt() + 180000 < new Date().getTime() / 1000) {
+				Log.d("MyLog", String.format("time\nid: %d\nupdateTime: %d\ndate: %d", user.getId(), user.getUpdatedLocationAt(), new Date().getTime() / 1000));
+				if (user.getUpdatedLocationAt() + 180 < new Date().getTime() / 1000) {
 					// 最終更新から3分以上経っている場合は表示しない
 					continue;
 				}
@@ -195,6 +197,10 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 		}
 
 		lastUpdateLocationTime = System.currentTimeMillis();
+	}
+
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
 	}
 
 	private class MyOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {

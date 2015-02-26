@@ -1,17 +1,40 @@
 package jp.gr.java_conf.shiolier.wayn.entity;
 
-public class GroupRequest {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
+
+public class GroupRequest implements Serializable {
+	public static final String KEY_ID = "id";
+	public static final String KEY_USER = "user";
+	public static final String KEY_GROUP = "group";
+	public static final String KEY_REQUEST_TIME = "request_time";
+
 	private int id;
 	private User user;
+	private Group group;
 	private long requestTime;
 
 	public GroupRequest() {
 	}
 
-	public GroupRequest(int id, User user, long requestTime) {
+	public GroupRequest(int id, User user, Group group, long requestTime) {
 		this.id = id;
 		this.user = user;
+		this.group = group;
 		this.requestTime = requestTime;
+	}
+
+	public GroupRequest(JSONObject jsonObject) {
+		try {
+			id = jsonObject.getInt(KEY_ID);
+			user = new User(jsonObject.getJSONObject(KEY_USER));
+			group = new Group(jsonObject.getJSONObject(KEY_GROUP));
+			requestTime = jsonObject.getLong(KEY_REQUEST_TIME);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public int getId() {
@@ -28,6 +51,14 @@ public class GroupRequest {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 
 	public long getRequestTime() {
