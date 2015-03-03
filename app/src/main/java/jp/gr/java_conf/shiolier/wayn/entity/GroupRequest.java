@@ -21,8 +21,9 @@ public class GroupRequest implements Serializable {
 	public GroupRequest() {
 	}
 
-	public GroupRequest(int groupId, int userId, String groupPassword) {
+	public GroupRequest(int groupId, int userId, String userPassword) {
 		group = new Group(groupId);
+		user = new User(userId, userPassword);
 	}
 
 	public GroupRequest(int id, User user, Group group, long requestTime) {
