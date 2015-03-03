@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 public class GroupRequest implements Serializable {
+	public static final String KEY_GROUP_REQUEST = "GROUP_REQUEST";
+
 	public static final String KEY_ID = "id";
 	public static final String KEY_USER = "user";
 	public static final String KEY_GROUP = "group";
@@ -19,6 +21,10 @@ public class GroupRequest implements Serializable {
 	public GroupRequest() {
 	}
 
+	public GroupRequest(int groupId, int userId, String groupPassword) {
+		group = new Group(groupId);
+	}
+
 	public GroupRequest(int id, User user, Group group, long requestTime) {
 		this.id = id;
 		this.user = user;
@@ -26,15 +32,16 @@ public class GroupRequest implements Serializable {
 		this.requestTime = requestTime;
 	}
 
-	public GroupRequest(JSONObject jsonObject) {
+	public GroupRequest(String jsonString) {
 		try {
-			id = jsonObject.getInt(KEY_ID);
-			user = new User(jsonObject.getJSONObject(KEY_USER));
-			group = new Group(jsonObject.getJSONObject(KEY_GROUP));
-			requestTime = jsonObject.getLong(KEY_REQUEST_TIME);
+			setRequestDataFromJSONObject(new JSONObject(jsonString));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public GroupRequest(JSONObject jsonObject) {
+		setRequestDataFromJSONObject(jsonObject);
 	}
 
 	public int getId() {
@@ -67,5 +74,16 @@ public class GroupRequest implements Serializable {
 
 	public void setRequestTime(long requestTime) {
 		this.requestTime = requestTime;
+	}
+
+	public void setRequestDataFromJSONObject(JSONObject jsonObject) {
+		try {
+			id = jsonObject.getInt(KEY_ID);
+			user = new User(jsonObject.getJSONObject(KEY_USER));
+			group = new Group(jsonObject.getJSONObject(KEY_GROUP));
+			requestTime = jsonObject.getLong(KEY_REQUEST_TIME);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 public class Group implements Serializable {
+	public static final String KEY_GROUP = "GROUP";
+
 	public static final String KEY_ID = "id";
 	public static final String KEY_NAME = "name";
 	public static final String KEY_LEADER = "leader";
@@ -19,22 +21,37 @@ public class Group implements Serializable {
 	public Group() {
 	}
 
+	public Group(int id) {
+		this.id = id;
+	}
+
+	public Group(String name, User leader) {
+		this.name = name;
+		this.leader = leader;
+	}
+
+	public Group(String groupName, int leaderId, String leaderPassword) {
+		this(groupName, new User(leaderId, leaderPassword));
+	}
+
 	public Group(int id, String name, User leader, long createdAt) {
+		this(name, leader);
 		this.id = id;
 		this.name = name;
 		this.leader = leader;
 		this.createdAt = createdAt;
 	}
 
-	public Group(String jsonString) throws JSONException {
-		this(new JSONObject(jsonString));
+	public Group(String jsonString) {
+		try {
+			setGroupDataFromJSONObject(new JSONObject(jsonString));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public Group(JSONObject jsonObject) throws JSONException {
-		id = jsonObject.getInt(KEY_ID);
-		name = jsonObject.getString(KEY_NAME);
-		leader = new User(jsonObject.getJSONObject(KEY_LEADER));
-		createdAt = jsonObject.getLong(KEY_CREATED_AT);
+	public Group(JSONObject jsonObject) {
+		setGroupDataFromJSONObject(jsonObject);
 	}
 
 	public int getId() {
@@ -69,17 +86,23 @@ public class Group implements Serializable {
 		this.createdAt = createdAt;
 	}
 
-	public void setForGroupCreate(String groupName, int userId, String userPassword) {
-		name = groupName;
-		leader = new User(userId, userPassword);
+	public void setGroupDataFromJSONObject(JSONObject jsonObject) {
+		try {
+			id = jsonObject.getInt(KEY_ID);
+			name = jsonObject.getString(KEY_NAME);
+			leader = new User(jsonObject.getJSONObject(KEY_LEADER));
+			createdAt = jsonObject.getLong(KEY_CREATED_AT);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public String jsonStringForCreateGroup() {
+	public String toJsonStringForCreateGroup() {
 		JSONObject jsonObject = new JSONObject();
 		try {
-			jsonObject.put(User.KEY_ID, leader.getId());
-			jsonObject.put(User.KEY_PASSWORD, leader.getPassword());
-			jsonObject.put("group_name", name);
+			jsonObject.put(User.KEY_ID, leader.getId())
+					.put(User.KEY_PASSWORD, leader.getPassword())
+					.put("group", new JSONObject().put(KEY_NAME, name));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
