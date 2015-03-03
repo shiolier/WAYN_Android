@@ -1,5 +1,7 @@
 package jp.gr.java_conf.shiolier.wayn.util;
 
+import android.location.Location;
+
 public class LocationCalc {
 	/** 地球の半径		単位:m(メートル) */
 	// Wikipediaより: http://ja.wikipedia.org/wiki/%E5%9C%B0%E7%90%83%E5%8D%8A%E5%BE%84

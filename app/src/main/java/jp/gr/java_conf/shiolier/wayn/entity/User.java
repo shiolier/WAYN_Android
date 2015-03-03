@@ -196,9 +196,9 @@ public class User implements Serializable {
 		return URLEncodedUtils.format(params, "UTF-8");
 	}
 
-	public Point2D getPoint2D(Location currentLocation, int meter) {
-		float x = (float)(((currentLocation.getLongitude() - getLongitude()) * LocationCalc.longitudeOneDegree(currentLocation.getLongitude()) / meter));
-		float y = (float)(((currentLocation.getLatitude() - getLatitude()) * LocationCalc.LATITUDE_ONE_DEGREE) / meter);
+	public Point2D getPoint2D(Location centerLocation, int meter) {
+		float x = (float)(((centerLocation.getLongitude() - getLongitude()) * LocationCalc.longitudeOneDegree(centerLocation.getLongitude()) / meter));
+		float y = (float)(((centerLocation.getLatitude() - getLatitude()) * LocationCalc.LATITUDE_ONE_DEGREE) / meter);
 
 		return new Point2D(x, y);
 	}

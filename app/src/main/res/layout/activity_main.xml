@@ -35,4 +35,12 @@
 		android:textSize="20sp"
 		android:id="@+id/btn_setting"/>
 
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="ID: 00000"
+		android:textSize="32sp"
+		android:gravity="center"
+		android:id="@+id/txt_user_id"/>
+
 </LinearLayout>

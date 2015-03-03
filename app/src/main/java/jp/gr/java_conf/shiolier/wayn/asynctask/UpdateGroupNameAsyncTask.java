@@ -7,55 +7,58 @@ import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.UnsupportedEncodingException;
 
 import jp.gr.java_conf.shiolier.wayn.entity.Group;
-import jp.gr.java_conf.shiolier.wayn.entity.User;
 import jp.gr.java_conf.shiolier.wayn.fragment.ProgressDialogFragment;
 
-public class GetBelongGroupAsyncTask extends AsyncTask<User, Void, ArrayList<Group>> {
-	private static final String URL = "http://157.7.204.152:60000/groups/belong.json";
+
+public class UpdateGroupNameAsyncTask extends AsyncTask<Group, Void, Boolean> {
+	private static final String URL = "http://157.7.204.152:60000/groups/update_name/";
 
 	private Activity activity;
 	private OnPostExecuteListener listener;
 	private ProgressDialogFragment dialogFragment;
 
-	public GetBelongGroupAsyncTask(Activity activity, OnPostExecuteListener listener) {
+	public UpdateGroupNameAsyncTask(Activity activity, OnPostExecuteListener listener) {
 		this.activity = activity;
 		this.listener = listener;
 	}
 
 	@Override
 	protected void onPreExecute() {
-		dialogFragment = ProgressDialogFragment.newInstance("通信中", "しばらくお待ち下さい");
+		dialogFragment = ProgressDialogFragment.newInstance("名前変更中", "しばらくお待ち下さい");
 		dialogFragment.show(activity.getFragmentManager(), "progress");
 	}
 
 	@Override
-	protected ArrayList<Group> doInBackground(User... params) {
+	protected Boolean doInBackground(Group... params) {
 		String data = null;
 
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet(URL + "?" + params[0].queryStringForAuthWhenGet());
+		HttpPost httpPost = new HttpPost(URL + params[0].getId() + ".json");
+		try {
+			httpPost.setEntity(new StringEntity(params[0].jsonStringForCreateGroup(), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 
 		try {
-			data = httpClient.execute(httpGet, new ResponseHandler<String>() {
+			data = httpClient.execute(httpPost, new ResponseHandler<String>() {
 				@Override
 				public String handleResponse(HttpResponse httpResponse) throws IOException {
 					int statusCode = httpResponse.getStatusLine().getStatusCode();
 					if (statusCode != 200) {
-						Log.w("MyLog", String.format("GetBelongGroup statusCode: %d", statusCode));
-						if (httpResponse.getEntity() != null) {
-							Log.w("MyLog", EntityUtils.toString(httpResponse.getEntity()));
-						}
+						Log.w("MyLog", String.format("UserNameUpdate statusCode: %d", statusCode));
+						Log.w("MyLog", EntityUtils.toString(httpResponse.getEntity()));
 						return null;
 					}
 					return EntityUtils.toString(httpResponse.getEntity());
@@ -65,29 +68,26 @@ public class GetBelongGroupAsyncTask extends AsyncTask<User, Void, ArrayList<Gro
 			e.printStackTrace();
 		}
 
-		ArrayList<Group> groupList = new ArrayList<>();
-		if (data == null)	return groupList;
+		if (data == null)	return false;
 
+		boolean result = false;
 		try {
-			JSONArray jsonArray = new JSONArray(data);
-			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject groupJson = jsonArray.getJSONObject(i);
-				groupList.add(new Group(groupJson));
-			}
+			JSONObject jsonObject = new JSONObject(data);
+			result = jsonObject.getBoolean("result");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
-		return groupList;
+		return result;
 	}
 
 	@Override
-	protected void onPostExecute(ArrayList<Group> groupList) {
+	protected void onPostExecute(Boolean result) {
 		dialogFragment.getDialog().dismiss();
-		listener.onPostExecute(groupList);
+		listener.onPostExecute(result);
 	}
 
 	public interface OnPostExecuteListener {
-		void onPostExecute(ArrayList<Group> groupList);
+		void onPostExecute(boolean result);
 	}
 }

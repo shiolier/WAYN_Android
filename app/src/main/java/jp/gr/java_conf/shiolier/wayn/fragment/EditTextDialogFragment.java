@@ -33,6 +33,8 @@ public class EditTextDialogFragment extends DialogFragment {
 				.setView(this.editText)
 				.setPositiveButton("OK", this.okClickListener);
 
+		setCancelable(false);
+
 		return builder.create();
 	}
 

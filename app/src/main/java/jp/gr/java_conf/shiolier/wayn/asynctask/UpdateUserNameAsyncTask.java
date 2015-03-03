@@ -20,14 +20,14 @@ import java.io.UnsupportedEncodingException;
 import jp.gr.java_conf.shiolier.wayn.entity.User;
 import jp.gr.java_conf.shiolier.wayn.fragment.ProgressDialogFragment;
 
-public class UserNameUpdateAsyncTask extends AsyncTask<User, Void, Boolean> {
+public class UpdateUserNameAsyncTask extends AsyncTask<User, Void, Boolean> {
 	private static final String URL = "http://157.7.204.152:60000/users/update_name.json";
 
 	private Activity activity;
 	private OnPostExecuteListener listener;
 	private ProgressDialogFragment dialogFragment;
 
-	public UserNameUpdateAsyncTask(Activity activity, OnPostExecuteListener listener) {
+	public UpdateUserNameAsyncTask(Activity activity, OnPostExecuteListener listener) {
 		this.activity = activity;
 		this.listener = listener;
 	}

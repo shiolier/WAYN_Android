@@ -8,8 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +27,9 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		TextView txtUserId = (TextView)findViewById(R.id.txt_user_id);
+		txtUserId.setText(String.format("ID: %d", new MySharedPref(this).getUserId(0)));
 
 		Button btnRadar = (Button)findViewById(R.id.btn_radar);
 		btnRadar.setOnClickListener(new View.OnClickListener() {
