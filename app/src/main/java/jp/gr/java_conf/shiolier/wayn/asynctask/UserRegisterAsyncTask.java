@@ -41,7 +41,7 @@ public class UserRegisterAsyncTask extends AsyncTask<User, Void, User> {
 	@Override
 	protected User doInBackground(User... params) {
 		String data = null;
-		String postJsonStr = params[0].jsonStringForUserRegister();
+		String postJsonStr = params[0].toJsonStringForUserRegistration();
 
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(URL);

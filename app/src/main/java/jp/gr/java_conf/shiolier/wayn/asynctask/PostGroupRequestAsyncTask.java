@@ -47,7 +47,7 @@ public class PostGroupRequestAsyncTask extends AsyncTask<User, Void, Boolean> {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(URL + groupId + ".json");
 		try {
-			httpPost.setEntity(new StringEntity(params[0].jsonObjectIdAndPassword().toString(), "UTF-8"));
+			httpPost.setEntity(new StringEntity(params[0].toJSONObjectContainIdAndPassword().toString(), "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

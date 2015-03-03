@@ -34,7 +34,7 @@ public class GetGroupLocationsAsyncTask extends AsyncTask<User, Void, ArrayList<
 		String data = null;
 
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet(URL + groupId + ".json?" + params[0].queryStringForAuthWhenGet());
+		HttpGet httpGet = new HttpGet(URL + groupId + ".json?" + params[0].toQueryStringForAuthWhenGet());
 
 		try {
 			data = httpClient.execute(httpGet, new ResponseHandler<String>() {
@@ -69,7 +69,6 @@ public class GetGroupLocationsAsyncTask extends AsyncTask<User, Void, ArrayList<
 				user.setName(userJson.getString(User.KEY_NAME));
 				user.setLatitude(userJson.getDouble(User.KEY_LATITUDE));
 				user.setLongitude(userJson.getDouble(User.KEY_LONGITUDE));
-				user.setAltitude(userJson.getDouble(User.KEY_ALTITUDE));
 				user.setUpdatedLocationAt(userJson.getLong(User.KEY_UPDATED_LOCATION_AT));
 				user.setCreatedAt(userJson.getLong(User.KEY_CREATED_AT));
 

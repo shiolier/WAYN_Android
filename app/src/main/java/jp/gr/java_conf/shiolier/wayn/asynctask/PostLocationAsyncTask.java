@@ -32,7 +32,7 @@ public class PostLocationAsyncTask extends AsyncTask<User, Void, User> {
 		String data = null;
 
 		User user = params[0];
-		String postJsonStr = user.jsonStringForUpdateLocaiton();
+		String postJsonStr = user.toJsonStringForUpdateLocaiton();
 
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(URL);

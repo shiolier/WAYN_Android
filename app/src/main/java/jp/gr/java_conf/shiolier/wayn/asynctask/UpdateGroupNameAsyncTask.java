@@ -46,7 +46,7 @@ public class UpdateGroupNameAsyncTask extends AsyncTask<Group, Void, Boolean> {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(URL + params[0].getId() + ".json");
 		try {
-			httpPost.setEntity(new StringEntity(params[0].jsonStringForCreateGroup(), "UTF-8"));
+			httpPost.setEntity(new StringEntity(params[0].toJsonStringForCreateGroup(), "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

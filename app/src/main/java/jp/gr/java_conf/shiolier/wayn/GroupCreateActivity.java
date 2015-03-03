@@ -48,9 +48,7 @@ public class GroupCreateActivity extends ActionBarActivity {
 
 		MySharedPref mySharedPref = new MySharedPref(this);
 
-		Group group = new Group();
-		group.setForGroupCreate(groupName, mySharedPref.getUserId(0), mySharedPref.getUserPassword(""));
-
+		Group group = new Group(groupName, mySharedPref.getUserId(0), mySharedPref.getUserPassword(""));
 		asyncTask.execute(group);
 	}
 }
