@@ -15,12 +15,13 @@ import jp.gr.java_conf.shiolier.wayn.util.LocationCalc;
 import jp.gr.java_conf.shiolier.wayn.util.Point2D;
 
 public class User implements Serializable {
+	public static final String KEY_USER = "USER";
+
 	public static final String KEY_ID = "id";
 	public static final String KEY_NAME = "name";
 	public static final String KEY_PASSWORD = "password";
 	public static final String KEY_LATITUDE = "latitude";
 	public static final String KEY_LONGITUDE = "longitude";
-	public static final String KEY_ALTITUDE = "altitude";
 	public static final String KEY_UPDATED_LOCATION_AT = "updated_location_at";
 	public static final String KEY_CREATED_AT = "created_at";
 
@@ -29,12 +30,17 @@ public class User implements Serializable {
 	private String password;
 	private double latitude;
 	private double longitude;
-	private double altitude;
 	private long updatedLocationAt;
 	private long createdAt;
+
 	private boolean existLocation;
 
 	public User() {
+	}
+
+	public User(String name, String password) {
+		this.name = name;
+		this.password = password;
 	}
 
 	public User(int id, String password) {
@@ -42,30 +48,29 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public User(int id, String name, String password, double latitude, double longitude, double altitude, int updatedLocationAt, int createdAt) {
-		this.id = id;
+	public User(int id, String name, String password) {
+		this(id, password);
 		this.name = name;
+	}
+
+	public User(int id, String name, String password, double latitude, double longitude, int updatedLocationAt, int createdAt) {
+		this(id, name, password);
 		this.latitude = latitude;
 		this.longitude = longitude;
-		this.altitude = altitude;
 		this.updatedLocationAt = updatedLocationAt;
 		this.createdAt = createdAt;
 	}
 
-	public User(String jsonString) throws JSONException {
-		this(new JSONObject(jsonString));
-	}
-
-	public User(JSONObject jsonObject) throws JSONException {
+	public User(String jsonString) {
 		try {
-			id = jsonObject.getInt(KEY_ID);
-			name = jsonObject.getString(KEY_NAME);
-			setLocation(jsonObject);
-			updatedLocationAt = jsonObject.getLong(KEY_UPDATED_LOCATION_AT);
-			createdAt = jsonObject.getLong(KEY_CREATED_AT);
+			setUserDataFromJSONObject(new JSONObject(jsonString));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public User(JSONObject jsonObject) {
+		setUserDataFromJSONObject(jsonObject);
 	}
 
 	public int getId() {
@@ -108,14 +113,6 @@ public class User implements Serializable {
 		this.longitude = longitude;
 	}
 
-	public double getAltitude() {
-		return altitude;
-	}
-
-	public void setAltitude(double altitude) {
-		this.altitude = altitude;
-	}
-
 	public long getUpdatedLocationAt() {
 		return updatedLocationAt;
 	}
@@ -136,22 +133,32 @@ public class User implements Serializable {
 		return existLocation;
 	}
 
-	public void setLocation(JSONObject jsonObject) {
+	public void setUserDataFromJSONObject(JSONObject jsonObject) {
+		try {
+			id = jsonObject.getInt(KEY_ID);
+			name = jsonObject.getString(KEY_NAME);
+			setLocationFromJSONObject(jsonObject);
+			createdAt = jsonObject.getLong(KEY_CREATED_AT);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setLocationFromJSONObject(JSONObject jsonObject) {
 		try {
 			latitude = jsonObject.getDouble(KEY_LATITUDE);
 			longitude = jsonObject.getDouble(KEY_LONGITUDE);
-			altitude = jsonObject.getDouble(KEY_ALTITUDE);
+			updatedLocationAt = jsonObject.getLong(KEY_UPDATED_LOCATION_AT);
 			existLocation = true;
 		} catch (JSONException e) {
 			e.printStackTrace();
 			existLocation = false;
 			latitude = 0.0;
 			longitude = 0.0;
-			altitude = 0.0;
 		}
 	}
 
-	public String jsonStringForUserRegister() {
+	public String toJsonStringForUserRegistration() {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			jsonObject.put(KEY_NAME, name);
@@ -163,14 +170,13 @@ public class User implements Serializable {
 		return jsonObject.toString();
 	}
 
-	public String jsonStringForUpdateLocaiton() {
+	public String toJsonStringForUpdateLocaiton() {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			jsonObject.put(KEY_ID, id);
 			jsonObject.put(KEY_PASSWORD, password);
 			jsonObject.put(KEY_LATITUDE, latitude);
 			jsonObject.put(KEY_LONGITUDE, longitude);
-			jsonObject.put(KEY_ALTITUDE, altitude);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return "";
@@ -178,7 +184,7 @@ public class User implements Serializable {
 		return jsonObject.toString();
 	}
 
-	public JSONObject jsonObjectIdAndPassword() {
+	public JSONObject toJSONObjectContainIdAndPassword() {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			jsonObject.put(KEY_ID, id);
@@ -189,8 +195,8 @@ public class User implements Serializable {
 		return jsonObject;
 	}
 
-	public String queryStringForAuthWhenGet() {
-		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+	public String toQueryStringForAuthWhenGet() {
+		ArrayList<NameValuePair> params = new ArrayList<>();
 		params.add(new BasicNameValuePair(KEY_ID, Integer.toString(id)));
 		params.add(new BasicNameValuePair(KEY_PASSWORD, password));
 		return URLEncodedUtils.format(params, "UTF-8");

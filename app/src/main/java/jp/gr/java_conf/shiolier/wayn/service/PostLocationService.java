@@ -123,7 +123,6 @@ public class PostLocationService extends Service {
 		user.setPassword(password);
 		user.setLatitude(location.getLatitude());
 		user.setLongitude(location.getLongitude());
-		user.setAltitude(location.getAltitude());
 		asyncTask.execute(user);
 	}
 

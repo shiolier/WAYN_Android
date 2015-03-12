@@ -25,6 +25,7 @@ import jp.gr.java_conf.shiolier.wayn.util.MySharedPref;
 import jp.gr.java_conf.shiolier.wayn.util.Point2D;
 
 public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Runnable, View.OnTouchListener {
+	private static final int REFERENCE_DISTANCE = 1000;
 	private static final float MY_MARKER_RADIUS = 10;
 
 	private int userId;
@@ -46,7 +47,6 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 	private int groupId;
 	private int screenWidth;
 	private int screenHeight;
-	private int meter = 100;
 	private float scale = 1.0f;
 	private long lastUpdateLocationTime;
 	private long lastGetDataTime;
@@ -155,7 +155,7 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 		// paint.setAntiAlias(true);
 		// canvas.drawCircle(screenWidth / 2.0f, screenHeight / 2.0f, MY_MARKER_RADIUS, paint);
 
-		Point2D myPoint = Point2D.locationToPoint2D(centerLocation, currentLocation, (int)(meter/scale));
+		Point2D myPoint = Point2D.locationToPoint2D(centerLocation, currentLocation, (int)(REFERENCE_DISTANCE / scale));
 		float myX = screenWidth / 2.0f + myPoint.getX() * screenWidth;
 		float myY = screenHeight / 2.0f + myPoint.getY() * screenHeight;
 		canvas.drawCircle(myX, myY, MY_MARKER_RADIUS, paint);
@@ -169,7 +169,7 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 					continue;
 				}
 
-				Point2D point = user.getPoint2D(currentLocation, (int)(meter/scale));
+				Point2D point = user.getPoint2D(currentLocation, (int)(REFERENCE_DISTANCE / scale));
 				float x = screenWidth / 2.0f + point.getX() * screenWidth;
 				float y = screenHeight / 2.0f + point.getY() * screenHeight;
 				// canvas.drawCircle(point.getX() * screenWidth, point.getY() * screenHeight, MY_MARKER_RADIUS / 2.0f, paint);

@@ -43,7 +43,7 @@ public class UpdateUserNameAsyncTask extends AsyncTask<User, Void, Boolean> {
 		String data = null;
 
 		String postJsonStr = null;
-		JSONObject jsonObject = params[0].jsonObjectIdAndPassword();
+		JSONObject jsonObject = params[0].toJSONObjectContainIdAndPassword();
 		try {
 			jsonObject.put(User.KEY_NAME, params[0].getName());
 			postJsonStr = jsonObject.toString();

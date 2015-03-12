@@ -44,7 +44,7 @@ public class GetBelongGroupAsyncTask extends AsyncTask<User, Void, ArrayList<Gro
 		String data = null;
 
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet(URL + "?" + params[0].queryStringForAuthWhenGet());
+		HttpGet httpGet = new HttpGet(URL + "?" + params[0].toQueryStringForAuthWhenGet());
 
 		try {
 			data = httpClient.execute(httpGet, new ResponseHandler<String>() {

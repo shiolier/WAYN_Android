@@ -45,7 +45,7 @@ public class GetGroupInfoAsyncTask extends AsyncTask<User, Void, Group> {
 		String data = null;
 
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet(URL + groupId + ".json?" + params[0].queryStringForAuthWhenGet());
+		HttpGet httpGet = new HttpGet(URL + groupId + ".json?" + params[0].toQueryStringForAuthWhenGet());
 
 		try {
 			data = httpClient.execute(httpGet, new ResponseHandler<String>() {
