@@ -42,7 +42,7 @@ public class CreateGroupAsyncTask extends AsyncTask<Group, Void, Group> {
 		String data = null;
 
 		Group group = params[0];
-		String postJsonStr = group.jsonStringForCreateGroup();
+		String postJsonStr = group.toJsonStringForCreateGroup();
 
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(URL);

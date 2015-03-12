@@ -12,6 +12,7 @@
 	<string name="title_activity_group_request_list">加入申請リスト</string>
 	<string name="title_activity_group_request_detail">加入申請詳細</string>
 	<string name="title_activity_name_change">ユーザー名変更</string>
+	<string name="title_activity_update_group_name">グループ名変更</string>
 	<string name="title_activity_group_manage_leader">グループ管理: リーダー</string>
 	<string name="title_activity_group_manage_memper">グループ管理: メンバー</string>
 
@@ -26,6 +27,7 @@
 	<string name="btn_search">検索</string>
 	<string name="btn_request">グループ参加申請</string>
 	<string name="btn_leave">グループを抜ける</string>
+	<string name="btn_update_group_name">グループ名変更</string>
 	<string name="btn_request_list">参加申請一覧</string>
 	<string name="tglbtn_post_location_enable_on">位置情報送信 ON</string>
 	<string name="tglbtn_post_location_enable_off">位置情報送信 OFF</string>

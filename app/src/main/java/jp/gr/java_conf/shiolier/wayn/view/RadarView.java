@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
@@ -24,6 +25,7 @@ import jp.gr.java_conf.shiolier.wayn.util.MySharedPref;
 import jp.gr.java_conf.shiolier.wayn.util.Point2D;
 
 public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Runnable, View.OnTouchListener {
+	private static final int REFERENCE_DISTANCE = 1000;
 	private static final float MY_MARKER_RADIUS = 10;
 
 	private int userId;
@@ -37,17 +39,19 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 	private ArrayList<User> userList;
 	private Thread thread;
 	private Handler handler;
-	private ScaleGestureDetector.SimpleOnScaleGestureListener onScaleGestureListener = new MyOnScaleGestureListener();
+	private GestureDetector gestureDetector;
+	private GestureDetector.SimpleOnGestureListener onGestureListener = new MyOnGestureListener();
 	private ScaleGestureDetector scaleGestureDetector;
+	private ScaleGestureDetector.SimpleOnScaleGestureListener onScaleGestureListener = new MyOnScaleGestureListener();
 
 	private int groupId;
 	private int screenWidth;
 	private int screenHeight;
-	private int meter = 100;
 	private float scale = 1.0f;
 	private long lastUpdateLocationTime;
 	private long lastGetDataTime;
 	private boolean isDuringGetData = false;
+	private Location centerLocation;
 
 	public RadarView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -74,6 +78,7 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 		userPassword = mySharedPref.getUserPassword("");
 		groupId = mySharedPref.getRadarGroupId(0);
 
+		gestureDetector = new GestureDetector(context, onGestureListener);
 		scaleGestureDetector = new ScaleGestureDetector(context, onScaleGestureListener);
 
 		holder = getHolder();
@@ -110,6 +115,10 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 		while (thread != null) {
 			myDraw();
 
+			if (lastUpdateLocationTime + 500 < System.currentTimeMillis()) {
+				updateLocation();
+			}
+
 			if (lastGetDataTime + 500 < System.currentTimeMillis() && !isDuringGetData) {
 				handler.post(new Runnable() {
 					@Override
@@ -117,9 +126,6 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 						getData();
 					}
 				});
-			}
-			if (lastUpdateLocationTime + 500 < System.currentTimeMillis()) {
-				updateLocation();
 			}
 			/*
 			try {
@@ -133,29 +139,37 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		scaleGestureDetector.onTouchEvent(event);
-		return true;
+		//return event.getPointerCount() == 1 ? gestureDetector.onTouchEvent(event) : scaleGestureDetector.onTouchEvent(event);
+		//return gestureDetector.onTouchEvent(event);
+		return scaleGestureDetector.onTouchEvent(event);
 	}
 
 	private void myDraw() {
+		if (centerLocation == null)	return;
+
 		Canvas canvas = holder.lockCanvas();
 		if (canvas == null)		return;
 		canvas.drawColor(Color.BLACK);
 
 		paint.setColor(Color.WHITE);
 		// paint.setAntiAlias(true);
-		canvas.drawCircle(screenWidth / 2.0f, screenHeight / 2.0f, MY_MARKER_RADIUS, paint);
+		// canvas.drawCircle(screenWidth / 2.0f, screenHeight / 2.0f, MY_MARKER_RADIUS, paint);
+
+		Point2D myPoint = Point2D.locationToPoint2D(centerLocation, currentLocation, (int)(REFERENCE_DISTANCE / scale));
+		float myX = screenWidth / 2.0f + myPoint.getX() * screenWidth;
+		float myY = screenHeight / 2.0f + myPoint.getY() * screenHeight;
+		canvas.drawCircle(myX, myY, MY_MARKER_RADIUS, paint);
 
 		if (userList != null) {
 			paint.setColor(Color.GREEN);
 			for (User user : userList) {
-				Log.d("MyLog", String.format("time\nid: %d\nupdateTime: %d\ndate: %d", user.getId(), user.getUpdatedLocationAt(), new Date().getTime() / 1000));
+				// Log.d("MyLog", String.format("time\nid: %d\nupdateTime: %d\ndate: %d", user.getId(), user.getUpdatedLocationAt(), new Date().getTime() / 1000));
 				if (user.getUpdatedLocationAt() + 180 < new Date().getTime() / 1000) {
 					// 最終更新から3分以上経っている場合は表示しない
 					continue;
 				}
 
-				Point2D point = user.getPoint2D(currentLocation, (int)(meter/scale));
+				Point2D point = user.getPoint2D(currentLocation, (int)(REFERENCE_DISTANCE / scale));
 				float x = screenWidth / 2.0f + point.getX() * screenWidth;
 				float y = screenHeight / 2.0f + point.getY() * screenHeight;
 				// canvas.drawCircle(point.getX() * screenWidth, point.getY() * screenHeight, MY_MARKER_RADIUS / 2.0f, paint);
@@ -196,6 +210,10 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 			currentLocation = gpsLocation.getTime() > networkLocation.getTime() ? gpsLocation : networkLocation;
 		}
 
+		if (centerLocation == null) {
+			centerLocation = currentLocation;
+		}
+
 		lastUpdateLocationTime = System.currentTimeMillis();
 	}
 
@@ -206,8 +224,19 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback, Ru
 	private class MyOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {
+			Log.d("MyLog", "onScale");
 			scale *= detector.getScaleFactor();
 			return true;
+		}
+	}
+
+	private class MyOnGestureListener extends GestureDetector.SimpleOnGestureListener {
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+			Log.d("MyLog", String.format("onScroll\nx: %f\ny: %f", distanceX, distanceY));
+			centerLocation.setLatitude(centerLocation.getLatitude() - distanceX / 100.0f);
+			centerLocation.setLongitude(centerLocation.getLongitude() - distanceY / 100.0f);
+			return false;
 		}
 	}
 }

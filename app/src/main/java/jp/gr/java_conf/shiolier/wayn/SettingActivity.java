@@ -28,7 +28,7 @@ public class SettingActivity extends ActionBarActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (position == 0) {
 					// 名前を変更
-					Intent intent = new Intent(SettingActivity.this, UserNameChangeActivity.class);
+					Intent intent = new Intent(SettingActivity.this, UpdateUserNameActivity.class);
 					startActivity(intent);
 				} else if (position == 1) {
 					// グループに入る

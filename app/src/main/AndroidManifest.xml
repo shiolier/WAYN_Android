@@ -59,16 +59,20 @@
             android:label="@string/title_activity_group_request_detail" >
         </activity>
         <activity
-            android:name=".UserNameChangeActivity"
+            android:name=".UpdateUserNameActivity"
             android:label="@string/title_activity_name_change" >
         </activity>
+        <activity
+            android:name=".GroupManageLeaderActivity"
+            android:label="@string/title_activity_group_manage_leader" >
+        </activity>
+        <activity
+            android:name=".GroupManageMemperActivity"
+            android:label="@string/title_activity_group_manage_memper" >
+        </activity>
 		<activity
-			android:name=".GroupManageLeaderActivity"
-			android:label="@string/title_activity_group_manage_leader" >
-		</activity>
-		<activity
-			android:name=".GroupManageMemperActivity"
-			android:label="@string/title_activity_group_manage_memper" >
+			android:name=".UpdateGroupNameActivity"
+			android:label="@string/title_activity_update_group_name" >
 		</activity>
 
         <service

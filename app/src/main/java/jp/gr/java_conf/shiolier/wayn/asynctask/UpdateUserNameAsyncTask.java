@@ -20,23 +20,21 @@ import java.io.UnsupportedEncodingException;
 import jp.gr.java_conf.shiolier.wayn.entity.User;
 import jp.gr.java_conf.shiolier.wayn.fragment.ProgressDialogFragment;
 
-public class PostGroupRequestAsyncTask extends AsyncTask<User, Void, Boolean> {
-	private static final String URL = "http://157.7.204.152:60000/groups/request/";
+public class UpdateUserNameAsyncTask extends AsyncTask<User, Void, Boolean> {
+	private static final String URL = "http://157.7.204.152:60000/users/update_name.json";
 
-	private int groupId;
 	private Activity activity;
 	private OnPostExecuteListener listener;
 	private ProgressDialogFragment dialogFragment;
 
-	public PostGroupRequestAsyncTask(int groupId, Activity activity, OnPostExecuteListener listener) {
-		this.groupId = groupId;
+	public UpdateUserNameAsyncTask(Activity activity, OnPostExecuteListener listener) {
 		this.activity = activity;
 		this.listener = listener;
 	}
 
 	@Override
 	protected void onPreExecute() {
-		dialogFragment = ProgressDialogFragment.newInstance("通信中", "しばらくお待ち下さい");
+		dialogFragment = ProgressDialogFragment.newInstance("名前変更中", "しばらくお待ち下さい");
 		dialogFragment.show(activity.getFragmentManager(), "progress");
 	}
 
@@ -44,10 +42,19 @@ public class PostGroupRequestAsyncTask extends AsyncTask<User, Void, Boolean> {
 	protected Boolean doInBackground(User... params) {
 		String data = null;
 
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(URL + groupId + ".json");
+		String postJsonStr = null;
+		JSONObject jsonObject = params[0].toJSONObjectContainIdAndPassword();
 		try {
-			httpPost.setEntity(new StringEntity(params[0].toJSONObjectContainIdAndPassword().toString(), "UTF-8"));
+			jsonObject.put(User.KEY_NAME, params[0].getName());
+			postJsonStr = jsonObject.toString();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost httpPost = new HttpPost(URL);
+		try {
+			httpPost.setEntity(new StringEntity(postJsonStr, "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -58,7 +65,7 @@ public class PostGroupRequestAsyncTask extends AsyncTask<User, Void, Boolean> {
 				public String handleResponse(HttpResponse httpResponse) throws IOException {
 					int statusCode = httpResponse.getStatusLine().getStatusCode();
 					if (statusCode != 200) {
-						Log.w("MyLog", String.format("PostGroupRequest statusCode: %d", statusCode));
+						Log.w("MyLog", String.format("UserNameUpdate statusCode: %d", statusCode));
 						Log.w("MyLog", EntityUtils.toString(httpResponse.getEntity()));
 						return null;
 					}
@@ -73,7 +80,7 @@ public class PostGroupRequestAsyncTask extends AsyncTask<User, Void, Boolean> {
 
 		boolean result = false;
 		try {
-			JSONObject jsonObject = new JSONObject(data);
+			jsonObject = new JSONObject(data);
 			result = jsonObject.getBoolean("result");
 		} catch (JSONException e) {
 			e.printStackTrace();

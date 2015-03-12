@@ -28,5 +28,15 @@ public class GroupManageLeaderActivity extends ActionBarActivity {
 				startActivity(intent);
 			}
 		});
+
+		Button btnUpdateGroupName = (Button)findViewById(R.id.btn_update_group_name);
+		btnUpdateGroupName.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(GroupManageLeaderActivity.this, UpdateGroupNameActivity.class);
+				intent.putExtra(EXTRA_GROUP, group);
+				startActivity(intent);
+			}
+		});
 	}
 }

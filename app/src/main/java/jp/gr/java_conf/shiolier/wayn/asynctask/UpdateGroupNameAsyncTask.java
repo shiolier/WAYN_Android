@@ -17,17 +17,18 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import jp.gr.java_conf.shiolier.wayn.entity.User;
+import jp.gr.java_conf.shiolier.wayn.entity.Group;
 import jp.gr.java_conf.shiolier.wayn.fragment.ProgressDialogFragment;
 
-public class UserNameUpdateAsyncTask extends AsyncTask<User, Void, Boolean> {
-	private static final String URL = "http://157.7.204.152:60000/users/update_name.json";
+
+public class UpdateGroupNameAsyncTask extends AsyncTask<Group, Void, Boolean> {
+	private static final String URL = "http://157.7.204.152:60000/groups/update_name/";
 
 	private Activity activity;
 	private OnPostExecuteListener listener;
 	private ProgressDialogFragment dialogFragment;
 
-	public UserNameUpdateAsyncTask(Activity activity, OnPostExecuteListener listener) {
+	public UpdateGroupNameAsyncTask(Activity activity, OnPostExecuteListener listener) {
 		this.activity = activity;
 		this.listener = listener;
 	}
@@ -39,22 +40,13 @@ public class UserNameUpdateAsyncTask extends AsyncTask<User, Void, Boolean> {
 	}
 
 	@Override
-	protected Boolean doInBackground(User... params) {
+	protected Boolean doInBackground(Group... params) {
 		String data = null;
 
-		String postJsonStr = null;
-		JSONObject jsonObject = params[0].jsonObjectIdAndPassword();
-		try {
-			jsonObject.put(User.KEY_NAME, params[0].getName());
-			postJsonStr = jsonObject.toString();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(URL);
+		HttpPost httpPost = new HttpPost(URL + params[0].getId() + ".json");
 		try {
-			httpPost.setEntity(new StringEntity(postJsonStr, "UTF-8"));
+			httpPost.setEntity(new StringEntity(params[0].toJsonStringForCreateGroup(), "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -80,7 +72,7 @@ public class UserNameUpdateAsyncTask extends AsyncTask<User, Void, Boolean> {
 
 		boolean result = false;
 		try {
-			jsonObject = new JSONObject(data);
+			JSONObject jsonObject = new JSONObject(data);
 			result = jsonObject.getBoolean("result");
 		} catch (JSONException e) {
 			e.printStackTrace();
