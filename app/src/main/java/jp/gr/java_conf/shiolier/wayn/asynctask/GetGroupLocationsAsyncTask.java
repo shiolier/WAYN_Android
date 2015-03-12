@@ -62,17 +62,7 @@ public class GetGroupLocationsAsyncTask extends AsyncTask<User, Void, ArrayList<
 		try {
 			JSONArray jsonArray = new JSONArray(data);
 			for (int i = 0; i < jsonArray.length(); i++) {
-				User user = new User();
-
-				JSONObject userJson = jsonArray.getJSONObject(i);
-				user.setId(userJson.getInt(User.KEY_ID));
-				user.setName(userJson.getString(User.KEY_NAME));
-				user.setLatitude(userJson.getDouble(User.KEY_LATITUDE));
-				user.setLongitude(userJson.getDouble(User.KEY_LONGITUDE));
-				user.setUpdatedLocationAt(userJson.getLong(User.KEY_UPDATED_LOCATION_AT));
-				user.setCreatedAt(userJson.getLong(User.KEY_CREATED_AT));
-
-				userList.add(user);
+				userList.add(new User(jsonArray.getJSONObject(i)));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
